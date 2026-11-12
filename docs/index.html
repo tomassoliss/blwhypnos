@@ -144,13 +144,40 @@ button{cursor:pointer;font-family:inherit}
 .table-scroll{overflow-x:auto}
 .g-table,.grilla-table{width:100%;border-collapse:collapse;font-size:13px}
 .g-table th,.grilla-table th{font-family:var(--font-h);font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--fg-sub);padding:7px 10px;text-align:left;background:var(--surface-2);border-bottom:1px solid var(--border);white-space:nowrap}
-.g-table td,.grilla-table td{padding:9px 10px;border-bottom:1px solid var(--border-lite);vertical-align:top}
+.g-table td,.grilla-table td{padding:7px 10px;border-bottom:1px solid var(--border-lite);vertical-align:middle}
 .g-table tr:last-child td,.grilla-table tr:last-child td{border-bottom:none}
 .g-table tr:hover td,.grilla-table tr:hover td{background:var(--surface-2)}
 tr[data-hidden="true"]{display:none}
 .item-name{font-weight:500;color:var(--fg)}
 .hito-badge{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;background:var(--s-ges-bg);color:var(--s-ges-fg);border-radius:4px;padding:1px 5px;vertical-align:middle;margin-left:5px}
-.item-notes{font-size:11.5px;color:var(--fg-muted);margin-top:3px;line-height:1.4}
+.item-notes{font-size:11.5px;color:var(--fg-muted);margin-top:3px;line-height:1.4;overflow:hidden;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;max-width:280px}
+.grilla-desc{display:none}
+.gantt-tipo,.grilla-pilar,.grilla-hitos{display:none}
+/* ── CALENDAR ────────────────────────────────────────────────── */
+.cal-nav-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;justify-content:space-between}
+.cal-title{font-family:var(--font-h);font-size:16px;font-weight:600;color:var(--fg)}
+.cal-nav-btn{background:none;border:1px solid var(--border);border-radius:6px;padding:5px 14px;color:var(--fg);font-size:14px;cursor:pointer;transition:border-color .12s}
+.cal-nav-btn:hover{border-color:var(--accent);color:var(--accent)}
+.cal-grid-wrap{padding:14px 16px}
+.cal-days-hdr{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:6px}
+.cal-dlabel{text-align:center;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--fg-sub);padding:3px 0}
+.cal-week{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:4px}
+.cal-cell{min-height:64px;background:var(--surface);border:1px solid var(--border-lite);border-radius:6px;padding:5px 6px;cursor:pointer;transition:border-color .12s,background .12s}
+.cal-cell:hover{border-color:var(--accent)}
+.cal-empty{background:transparent!important;border-color:transparent!important;cursor:default;pointer-events:none}
+.cal-today{border-color:var(--accent);background:var(--accent-lite)}
+.cal-sel{border-color:var(--accent);border-width:2px}
+.cal-dn{font-size:12px;font-weight:600;color:var(--fg-muted);line-height:1;margin-bottom:5px}
+.cal-today .cal-dn{color:var(--accent-txt);font-weight:700}
+.cal-dots{display:flex;flex-wrap:wrap;gap:3px;align-items:center}
+.cal-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.cal-more{font-size:9px;color:var(--fg-sub);font-weight:600;line-height:1}
+.cal-panel{margin:0 16px 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.cal-panel-hdr{font-family:var(--font-h);font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--fg-sub);padding:9px 14px;border-bottom:1px solid var(--border-lite);background:var(--surface-2)}
+.cal-panel-body{padding:10px 14px;display:flex;flex-direction:column;gap:8px}
+.cal-pi{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;background:var(--surface-2)}
+.cal-link{font-size:14px;text-decoration:none;color:var(--accent);flex-shrink:0}
+@media(max-width:600px){.cal-cell{min-height:48px;padding:4px}.cal-dn{font-size:11px}}
 .prio{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px}
 .prio-urgente{background:#EF4444}.prio-alta{background:#F59E0B}
 .prio-media{background:#22C55E}.prio-baja{background:#94A3B8}
@@ -256,6 +283,7 @@ tr[data-hidden="true"]{display:none}
     <button class="tab-btn active" data-target="resumen">Resumen</button>
     <button class="tab-btn" data-target="gantt">Carta Gantt</button>
     <button class="tab-btn" data-target="grilla">Grilla de Contenidos</button>
+    <button class="tab-btn" data-target="cal">Calendario</button>
   </nav>
 
   <section class="tab-panel active" id="panel-resumen">
@@ -274,6 +302,7 @@ tr[data-hidden="true"]{display:none}
         <span class="pill" data-filter="pendiente">Pendiente</span>
         <span class="pill" data-filter="postergado">Postergado</span>
         <span class="pill" data-filter="publicado">Publicado</span>
+        <span class="pill" data-filter="!publicado" title="Excluir publicados">≠ Publicado</span>
       </div>
       <span class="filter-label">Responsable</span>
       <div class="filter-pills" id="fp-gantt">
@@ -287,6 +316,10 @@ tr[data-hidden="true"]{display:none}
     <div class="inner" id="gantt-container"></div>
   </section>
 
+  <section class="tab-panel" id="panel-cal">
+    <div id="cal-container"></div>
+  </section>
+
   <section class="tab-panel" id="panel-grilla">
     <div class="filters">
       <span class="filter-label">Estado</span>
@@ -297,6 +330,7 @@ tr[data-hidden="true"]{display:none}
         <span class="pill" data-filter="guion">Guión</span>
         <span class="pill" data-filter="pendiente">Pendiente</span>
         <span class="pill" data-filter="postergado">Postergado</span>
+        <span class="pill" data-filter="!publicado" title="Excluir publicados">≠ Publicado</span>
       </div>
       <span class="filter-label">Canal</span>
       <div class="filter-pills" id="fc-grilla">
@@ -508,6 +542,71 @@ function rerenderAll(){
   renderSummary();
   renderGantt(ganttStatus,ganttPerson);
   renderGrilla(grillaStatus,grillaCanal);
+  renderCalendar();
+}
+
+/* ── CALENDAR ────────────────────────────────────────────────── */
+let calYear=new Date().getFullYear();
+let calMonth=new Date().getMonth();
+let calSelected=null;
+const MONTHS_ES=["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+const DAYS_ES=["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"];
+
+function renderCalendar(){
+  if(!D) return;
+  const c=document.getElementById("cal-container"); if(!c) return;
+  const allItems=[];
+  D.gantt.forEach(p=>p.items.forEach(it=>{
+    const d=parseDate(it.fecha);
+    if(d) allItems.push({...it,_d:d,_src:"gantt",_phColor:p.color});
+  }));
+  D.grilla.forEach(it=>{
+    const d=parseDate(it.fecha);
+    if(d) allItems.push({...it,_d:d,_src:"grilla"});
+  });
+  const byDate={};
+  allItems.forEach(item=>{
+    const k=`${item._d.getFullYear()}-${item._d.getMonth()}-${item._d.getDate()}`;
+    (byDate[k]=byDate[k]||[]).push(item);
+  });
+  const firstDay=new Date(calYear,calMonth,1);
+  const lastDay=new Date(calYear,calMonth+1,0);
+  const today=new Date(); today.setHours(0,0,0,0);
+  let startDow=firstDay.getDay();
+  startDow=startDow===0?6:startDow-1;
+  const cells=[];
+  for(let i=0;i<startDow;i++) cells.push(null);
+  for(let d=1;d<=lastDay.getDate();d++) cells.push(d);
+  while(cells.length%7!==0) cells.push(null);
+  const selKey=calSelected?`${calSelected.y}-${calSelected.m}-${calSelected.d}`:null;
+  const weeks=[];
+  for(let i=0;i<cells.length;i+=7) weeks.push(cells.slice(i,i+7));
+  function dotColor(status){
+    const map={publicado:"var(--s-pub-fg)","en-edicion":"var(--s-edi-fg)",guion:"var(--s-gui-fg)",urgente:"var(--s-urg-fg)","en-gestion":"var(--s-ges-fg)",pendiente:"var(--s-pen-fg)",postergado:"var(--s-pos-fg)"};
+    return map[status]||"var(--fg-sub)";
+  }
+  const gridHTML=weeks.map(week=>`<div class="cal-week">${week.map(day=>{
+    if(!day) return`<div class="cal-cell cal-empty"></div>`;
+    const k=`${calYear}-${calMonth}-${day}`;
+    const items=byDate[k]||[];
+    const dt=new Date(calYear,calMonth,day);
+    const isToday=dt.getTime()===today.getTime();
+    const isSel=calSelected&&calSelected.y===calYear&&calSelected.m===calMonth&&calSelected.d===day;
+    const dots=items.slice(0,4).map(it=>`<span class="cal-dot" style="background:${dotColor(it.status)}" title="${esc(it.name)}"></span>`).join("")+(items.length>4?`<span class="cal-more">+${items.length-4}</span>`:"");
+    return`<div class="cal-cell${isToday?" cal-today":""}${isSel?" cal-sel":""}" data-cal-day="${day}"><div class="cal-dn">${day}</div><div class="cal-dots">${dots}</div></div>`;
+  }).join("")}</div>`).join("");
+  const selItems=selKey?(byDate[selKey]||[]):[];
+  const panelHTML=calSelected&&selItems.length?`<div class="cal-panel"><div class="cal-panel-hdr">${calSelected.d} de ${MONTHS_ES[calSelected.m]} ${calSelected.y} · ${selItems.length} ítem${selItems.length!==1?"s":""}</div><div class="cal-panel-body">${selItems.map(it=>`<div class="cal-pi"><div style="flex:1;min-width:0"><div style="font-weight:500;font-size:13px">${esc(it.name)}</div><div style="display:flex;gap:5px;margin-top:4px;align-items:center">${chips(it.resp||[])}${it._src==="gantt"?`<span class="type-tag">${esc(it.type||"")}</span>`:`<span class="type-tag">${esc(it.formato||"")}</span>`}</div></div>${badge(it.status)}${it.link?`<a href="${esc(it.link)}" target="_blank" rel="noopener" class="cal-link">↗</a>`:""}</div>`).join("")}</div></div>`:"";
+  c.innerHTML=`<div class="cal-nav-bar"><button class="cal-nav-btn" id="calPrev">←</button><span class="cal-title">${MONTHS_ES[calMonth]} ${calYear}</span><button class="cal-nav-btn" id="calNext">→</button></div><div class="cal-grid-wrap"><div class="cal-days-hdr">${DAYS_ES.map(d=>`<div class="cal-dlabel">${d}</div>`).join("")}</div><div id="calWeeks">${gridHTML}</div></div>${panelHTML}`;
+  document.getElementById("calPrev").onclick=()=>{ calMonth--; if(calMonth<0){calMonth=11;calYear--;} renderCalendar(); };
+  document.getElementById("calNext").onclick=()=>{ calMonth++; if(calMonth>11){calMonth=0;calYear++;} renderCalendar(); };
+  document.getElementById("calWeeks").addEventListener("click",e=>{
+    const cell=e.target.closest("[data-cal-day]"); if(!cell) return;
+    const day=+cell.dataset.calDay;
+    if(calSelected&&calSelected.y===calYear&&calSelected.m===calMonth&&calSelected.d===day) calSelected=null;
+    else calSelected={y:calYear,m:calMonth,d:day};
+    renderCalendar();
+  });
 }
 
 /* ── SUMMARY ─────────────────────────────────────────────────── */
@@ -573,7 +672,7 @@ function renderGantt(sf="all",pf="all"){
   if(!D) return;
   const c=document.getElementById("gantt-container"); c.innerHTML="";
   D.gantt.forEach((phase,pi)=>{
-    const rows=phase.items.map((item,ii)=>({item,ii,show:(sf==="all"||item.status===sf)&&(pf==="all"||(item.resp||[]).includes(pf))}));
+    const rows=phase.items.map((item,ii)=>({item,ii,show:(sf==="all"||(sf.startsWith("!")?item.status!==sf.slice(1):item.status===sf))&&(pf==="all"||(item.resp||[]).includes(pf))}));
     const vis=rows.filter(r=>r.show).length;
     const block=document.createElement("div"); block.className="phase-block";
     block.innerHTML=`
@@ -588,15 +687,16 @@ function renderGantt(sf="all",pf="all"){
         <div class="table-scroll"><table class="g-table">
           <thead><tr>
             <th style="width:16px"></th><th style="min-width:260px">Tarea / Contenido</th>
-            <th>Tipo</th><th>Responsable</th><th style="width:120px">Fecha</th>
-            <th style="width:130px">Estado</th><th style="width:60px"></th>
+            <th class="gantt-tipo">Tipo</th><th>Responsable</th><th style="width:120px">Fecha</th>
+            <th style="width:130px">Estado</th><th style="width:36px"></th><th style="width:60px"></th>
           </tr></thead>
           <tbody>${rows.map(({item,ii,show})=>`
             <tr data-hidden="${!show}">
               <td><div class="prio-wrap"><span class="prio prio-${item.prio}" title="${item.prio}"></span></div></td>
-              <td><div class="item-name">${esc(item.name)}${item.hito?`<span class="hito-badge">Hito</span>`:""}</div>${item.notes?`<div class="item-notes">${esc(item.notes)}</div>`:""}</td>
-              <td><span class="type-tag">${esc(item.type)}</span></td>
+              <td><div class="item-name">${esc(item.name)}${item.hito?`<span class="hito-badge">Hito</span>`:""}</div></td>
+              <td class="gantt-tipo"><span class="type-tag">${esc(item.type)}</span></td>
               <td>${chips(item.resp)}</td><td>${dateCell(item.fecha)}</td><td>${badge(item.status)}</td>
+              <td style="text-align:center">${item.link?`<a href="${esc(item.link)}" target="_blank" rel="noopener" title="${esc(item.link)}" style="font-size:14px;text-decoration:none;color:var(--accent)">↗</a>`:"—"}</td>
               <td><button class="btn-edit" data-action="edit-gantt" data-pi="${pi}" data-ii="${ii}">Editar</button></td>
             </tr>`).join("")}
           </tbody>
@@ -619,28 +719,28 @@ function renderGantt(sf="all",pf="all"){
 function renderGrilla(sf="all",cf="all"){
   if(!D) return;
   const c=document.getElementById("grilla-container"); c.innerHTML="";
-  const rows=D.grilla.map((item,ii)=>({item,ii,show:(sf==="all"||item.status===sf)&&(cf==="all"||item.canal===cf)}));
+  const rows=D.grilla.map((item,ii)=>({item,ii,show:(sf==="all"||(sf.startsWith("!")?item.status!==sf.slice(1):item.status===sf))&&(cf==="all"||item.canal===cf)}));
   const vis=rows.filter(r=>r.show).length;
   const canalCls=cv=>({Hypnos:"canal-hypnos",BLW:"canal-blw",Ambos:"canal-ambos"}[cv]||"");
   const wrap=document.createElement("div"); wrap.className="table-wrap";
   wrap.innerHTML=`
     <div class="table-scroll"><table class="grilla-table">
       <thead><tr>
-        <th>#</th><th style="min-width:180px">Contenido</th><th style="min-width:140px">Pilar</th>
-        <th>Formato</th><th style="min-width:160px">Descripción</th><th>Canal</th>
+        <th>#</th><th style="min-width:180px">Contenido</th><th class="grilla-pilar">Pilar</th>
+        <th>Formato</th><th class="grilla-desc" style="min-width:160px">Descripción</th><th>Canal</th>
         <th>Responsable</th><th style="width:110px">Fecha</th><th style="width:120px">Estado</th>
-        <th style="width:50px">Hitos</th><th style="width:40px">Link</th><th style="width:60px"></th>
+        <th class="grilla-hitos" style="width:50px">Hitos</th><th style="width:40px">Link</th><th style="width:60px"></th>
       </tr></thead>
       <tbody>${rows.map(({item,ii,show})=>`
         <tr data-hidden="${!show}">
           <td style="color:var(--fg-sub);font-size:11px;white-space:nowrap">${esc(item.id)}</td>
-          <td style="font-weight:500">${esc(item.name)}${item.notes?`<div class="item-notes">${esc(item.notes)}</div>`:""}</td>
-          <td style="font-size:12px;color:var(--fg-muted)">${esc(item.pilar)}</td>
+          <td style="font-weight:500">${esc(item.name)}</td>
+          <td class="grilla-pilar" style="font-size:12px;color:var(--fg-muted)">${esc(item.pilar)}</td>
           <td><span class="type-tag">${esc(item.formato)}</span></td>
-          <td style="font-size:12px;color:var(--fg-muted)">${esc(item.desc)}</td>
+          <td class="grilla-desc" style="font-size:12px;color:var(--fg-muted)">${esc(item.desc)}</td>
           <td><span class="${canalCls(item.canal)}">${esc(item.canal)}</span></td>
           <td>${chips(item.resp)}</td><td>${dateCell(item.fecha)}</td><td>${badge(item.status)}</td>
-          <td style="font-size:11px;text-align:center">${item.hitoBlw?`<span style="color:var(--p-regina-fg);font-weight:700;font-size:10px;display:block">BL</span>`:""}${item.hitoHypnos?`<span style="color:var(--p-tomas-fg);font-weight:700;font-size:10px;display:block">H</span>`:""}</td>
+          <td class="grilla-hitos" style="font-size:11px;text-align:center">${item.hitoBlw?`<span style="color:var(--p-regina-fg);font-weight:700;font-size:10px;display:block">BL</span>`:""}${item.hitoHypnos?`<span style="color:var(--p-tomas-fg);font-weight:700;font-size:10px;display:block">H</span>`:""}</td>
           <td>${item.link?`<a href="${esc(item.link)}" target="_blank" rel="noopener" style="font-size:11px;color:var(--accent)">Ver</a>`:"—"}</td>
           <td><button class="btn-edit" data-action="edit-grilla" data-ii="${ii}">Editar</button></td>
         </tr>`).join("")}
@@ -664,7 +764,7 @@ function selOpts(options,val){ return options.map(o=>`<option value="${esc2(o)}"
 function respChecks(arr){ return PERSONS.map(p=>`<label class="checkbox-item"><input type="checkbox" value="${esc2(p)}"${(arr||[]).includes(p)?" checked":""}> ${personChip(p)}</label>`).join(""); }
 
 function buildGanttForm(item){
-  const v=item||{name:"",type:"Contenido",resp:[],fecha:"",status:"pendiente",prio:"media",hito:false,notes:""};
+  const v=item||{name:"",type:"Contenido",resp:[],fecha:"",status:"pendiente",prio:"media",hito:false,link:"",notes:""};
   return `
     <div class="form-group"><label class="form-label">Nombre</label><input class="form-input" id="f-name" value="${esc2(v.name)}" placeholder="Nombre del ítem"></div>
     <div class="form-row">
@@ -677,6 +777,7 @@ function buildGanttForm(item){
     </div>
     <div class="form-group"><label class="form-label">Responsable</label><div class="checkbox-group">${respChecks(v.resp)}</div></div>
     <div class="form-group"><label class="form-label">Notas / Detalle</label><textarea class="form-textarea" id="f-notes" placeholder="Detalle, contexto, instrucciones...">${esc2(v.notes)}</textarea></div>
+    <div class="form-group"><label class="form-label">Link</label><input class="form-input" id="f-link" value="${esc2(v.link||"")}" placeholder="https://..."></div>
     <div class="form-group"><label class="toggle-wrap"><input type="checkbox" id="f-hito"${v.hito?" checked":""}> Marcar como Hito de campaña</label></div>`;
 }
 function buildGrillaForm(item){
@@ -722,7 +823,7 @@ async function saveModal(){
   const name=getVal("f-name");
   if(!name){ alert("El nombre es obligatorio."); return; }
   if(ctx.type==="gantt"){
-    const item={id:ctx.mode==="edit"?D.gantt[ctx.pi].items[ctx.ii].id:uid(),name,type:getVal("f-type"),resp:getCheckedBoxes(),fecha:getVal("f-fecha")||"Por definir",status:getVal("f-status")||"pendiente",prio:getVal("f-prio")||"media",hito:getCheck("f-hito"),notes:getVal("f-notes")};
+    const item={id:ctx.mode==="edit"?D.gantt[ctx.pi].items[ctx.ii].id:uid(),name,type:getVal("f-type"),resp:getCheckedBoxes(),fecha:getVal("f-fecha")||"Por definir",status:getVal("f-status")||"pendiente",prio:getVal("f-prio")||"media",hito:getCheck("f-hito"),link:getVal("f-link")||"",notes:getVal("f-notes")};
     if(ctx.mode==="edit") D.gantt[ctx.pi].items[ctx.ii]=item;
     else D.gantt[ctx.pi].items.push(item);
   } else {
