@@ -8,10 +8,10 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500&display=swap">
 
 <script>
-// Firebase es opcional. Si quieres sync en tiempo real entre el equipo,
-// reemplaza estos valores con los de tu proyecto en console.firebase.google.com
-const FIREBASE_CONFIG = null; // null = solo localStorage (funciona igual, sin sync)
-// const FIREBASE_CONFIG = { apiKey: "...", databaseURL: "https://....firebaseio.com", ... };
+// ── CONFIGURACIÓN ─────────────────────────────────────────────
+// Pega aquí la URL que te da Google Apps Script al deployar
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxGKMuYqfX_rBNZlY0sjmT8k3S8JH8GjGNZxlsVb8izlLlGSGmAYWwpVF2babw56yF4/exec";
+// ─────────────────────────────────────────────────────────────
 </script>
 
 <style>
@@ -405,9 +405,7 @@ const DEFAULT_DATA = {
 /* ── STATE ───────────────────────────────────────────────────── */
 const LS_KEY = "blw-hypnos-plan-v2";
 let D = null;
-let dbRef = null;
-let isMySave = false;
-let firebaseReady = false;
+const GS_CONFIGURED = SCRIPT_URL !== "PEGA_LA_URL_DEL_APPS_SCRIPT_AQUI";
 
 function setSyncPill(state, text){
   const pill = document.getElementById("syncPill");
@@ -417,83 +415,62 @@ function setSyncPill(state, text){
   if(label) label.textContent = text || "";
 }
 
-/* ── FIREBASE INIT ───────────────────────────────────────────── */
-function initFirebase(){
-  if(!FIREBASE_CONFIG){
-    // Sin Firebase — solo localStorage
-    D = loadFromLS();
-    rerenderAll();
-    setSyncPill("", "Local");
-    return;
-  }
-
+async function remoteLoad(){
+  if(!GS_CONFIGURED) return null;
   try {
-    firebase.initializeApp(FIREBASE_CONFIG);
-    const db = firebase.database();
-    dbRef = db.ref("plan");
+    const r = await fetch(SCRIPT_URL);
+    if(!r.ok) return null;
+    const data = await r.json();
+    return (data && data.gantt && data.grilla) ? data : null;
+  } catch(e){ return null; }
+}
 
-    setSyncPill("", "Conectando...");
+async function remoteSave(d){
+  if(!GS_CONFIGURED) return false;
+  try {
+    // Sin Content-Type header → text/plain → no CORS preflight
+    await fetch(SCRIPT_URL, { method:"POST", body: JSON.stringify(d) });
+    return true;
+  } catch(e){ return false; }
+}
 
-    const timeout = setTimeout(() => {
-      if(!firebaseReady){
-        setSyncPill("error", "Sin conexión");
-        D = loadFromLS();
-        rerenderAll();
-      }
-    }, 10000);
-
-    dbRef.on("value", snap => {
-      clearTimeout(timeout);
-      const data = snap.val();
-      if(data && data.gantt && data.grilla){
-        if(!isMySave){
-          D = JSON.parse(JSON.stringify(data));
-          if(!document.getElementById("modalOverlay").classList.contains("open")){
-            rerenderAll();
-          }
-        }
-      } else if(!firebaseReady) {
-        // Primera vez: subir los datos por defecto
-        D = loadFromLS();
-        dbRef.set(D).catch(()=>{});
-        rerenderAll();
-      }
-      firebaseReady = true;
-      setSyncPill("live", "Sincronizado");
+async function init(){
+  setSyncPill("", "Cargando...");
+  if(GS_CONFIGURED){
+    const remote = await remoteLoad();
+    if(remote){
+      D = remote;
       try { localStorage.setItem(LS_KEY, JSON.stringify(D)); } catch(e){}
-    }, err => {
-      clearTimeout(timeout);
-      setSyncPill("error", "Error DB");
-      if(!firebaseReady){
-        D = loadFromLS();
-        rerenderAll();
-        firebaseReady = true;
-      }
-    });
-  } catch(e) {
-    console.error("Firebase init error:", e);
-    setSyncPill("error", "Error config");
+      setSyncPill("live", "Guardado ✓");
+    } else {
+      // Primera vez: no hay datos remotos → subir DEFAULT_DATA
+      D = loadFromLS();
+      setSyncPill("saving", "Iniciando...");
+      const ok = await remoteSave(D);
+      setSyncPill(ok?"live":"error", ok?"Guardado ✓":"Error conexión");
+    }
+  } else {
     D = loadFromLS();
-    rerenderAll();
+    setSyncPill("", "Local");
   }
+  rerenderAll();
 }
 
 function loadFromLS(){
-  // Si viene ?reset=1 en la URL, usar DEFAULT_DATA
   if(location.search.includes("reset=1")) return JSON.parse(JSON.stringify(DEFAULT_DATA));
   try { const s=localStorage.getItem(LS_KEY); if(s) return JSON.parse(s); } catch(e){}
   return JSON.parse(JSON.stringify(DEFAULT_DATA));
 }
 
 async function saveData(d){
-  isMySave = true;
   setSyncPill("saving", "Guardando...");
-  if(dbRef && firebaseReady){
-    try { await dbRef.set(d); } catch(e){ console.warn("DB save error",e); setSyncPill("error","Error al guardar"); }
+  try { localStorage.setItem(LS_KEY, JSON.stringify(d)); } catch(e){}
+  if(GS_CONFIGURED){
+    const ok = await remoteSave(d);
+    setSyncPill(ok?"live":"error", ok?"Guardado ✓":"Error al guardar");
+  } else {
+    setSyncPill("", "Local");
   }
-  isMySave = false;
-  setSyncPill("live", "Sincronizado");
-  try { localStorage.setItem(LS_KEY,JSON.stringify(d)); } catch(e){}
 }
 
 /* ── HELPERS ─────────────────────────────────────────────────── */
@@ -812,7 +789,7 @@ document.getElementById("modalOverlay").addEventListener("click",e=>{ if(e.targe
 document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeModal(); });
 
 /* ── START ───────────────────────────────────────────────────── */
-initFirebase();
+init();
 </script>
 </body>
 </html>
