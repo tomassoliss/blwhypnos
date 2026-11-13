@@ -1,18 +1,14 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!--
+  BLW <> Hypnos — Plan de lanzamiento y consolidación
+  Cambios del equipo se guardan en tiempo real (compartido entre todos los usuarios).
+  Para cambios permanentes en el archivo, editar DEFAULT_DATA en el script.
+  Modo ejecutivo: agrega #exec a la URL para abrirlo en vista simplificada.
+-->
 <title>BLW × Hypnos — Plan Verano</title>
+<meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500&display=swap">
-
-<script>
-// ── CONFIGURACIÓN ─────────────────────────────────────────────
-// Pega aquí la URL que te da Google Apps Script al deployar
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxGKMuYqfX_rBNZlY0sjmT8k3S8JH8GjGNZxlsVb8izlLlGSGmAYWwpVF2babw56yF4/exec";
-// ─────────────────────────────────────────────────────────────
-</script>
 
 <style>
 /* ── TOKENS ─────────────────────────────────────────────────── */
@@ -38,7 +34,7 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxGKMuYqfX_rBNZlY0sj
   --font-b:'Inter',system-ui,sans-serif;
 }
 @media (prefers-color-scheme:dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --bg:#0F1210; --surface:#191E1A; --surface-2:#222922; --border:#2E3830; --border-lite:#242E25;
     --fg:#E8E5E0; --fg-muted:#9A9790; --fg-sub:#6A6760;
     --accent:#52B788; --accent-lite:#1A2E22; --accent-txt:#A7F3D0;
@@ -51,55 +47,111 @@ const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxGKMuYqfX_rBNZlY0sj
     --p-equipo-bg:#1E293B; --p-equipo-fg:#CBD5E1; color-scheme:dark;
   }
 }
+:root[data-theme="dark"] {
+  --bg:#0F1210;--surface:#191E1A;--surface-2:#222922;--border:#2E3830;--border-lite:#242E25;
+  --fg:#E8E5E0;--fg-muted:#9A9790;--fg-sub:#6A6760;--accent:#52B788;--accent-lite:#1A2E22;--accent-txt:#A7F3D0;
+  --s-pub-bg:#052E16;--s-pub-fg:#34D399;--s-edi-bg:#1E3A5F;--s-edi-fg:#93C5FD;
+  --s-gui-bg:#2D1B69;--s-gui-fg:#C4B5FD;--s-urg-bg:#450A0A;--s-urg-fg:#FCA5A5;
+  --s-ges-bg:#451A03;--s-ges-fg:#FCD34D;--s-pen-bg:#1F2937;--s-pen-fg:#9CA3AF;
+  --s-pos-bg:#2A1F1A;--s-pos-fg:#BBA599;
+  --p-sofia-bg:#4C0519;--p-sofia-fg:#FECDD3;--p-regina-bg:#052E16;--p-regina-fg:#A7F3D0;
+  --p-marcelo-bg:#422006;--p-marcelo-fg:#FDE68A;--p-tomas-bg:#2D1B69;--p-tomas-fg:#DDD6FE;
+  --p-equipo-bg:#1E293B;--p-equipo-fg:#CBD5E1;color-scheme:dark;
+}
 
 /* ── BASE ────────────────────────────────────────────────────── */
 *,*::before,*::after{box-sizing:border-box}
 html,body{height:100%;margin:0}
-body{font-family:var(--font-b);font-size:14px;background:var(--bg);color:var(--fg);line-height:1.5}
+body{
+  font-family:var(--font-b);font-size:14px;
+  background:var(--bg);color:var(--fg);line-height:1.5;
+  padding-left:max(0px,env(safe-area-inset-left,0px));
+  padding-right:max(0px,env(safe-area-inset-right,0px));
+}
 button{cursor:pointer;font-family:inherit}
 
 /* ── HEADER ──────────────────────────────────────────────────── */
 .header{
   background:var(--surface);border-bottom:1px solid var(--border);
-  padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+  padding:14px max(16px,env(safe-area-inset-left,0px));
+  display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+  transition:border-color .2s;
 }
-.header-brand{font-family:var(--font-h);font-weight:700;font-size:17px;color:var(--accent-txt);letter-spacing:-.01em;display:flex;align-items:center;gap:8px}
-.header-brand .sep{color:var(--fg-muted);font-weight:400}
+.header-left{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.header-brand{
+  font-family:var(--font-h);font-weight:700;font-size:17px;
+  color:var(--accent-txt);letter-spacing:-.01em;
+}
+.header-brand .sep{color:var(--fg-muted);margin:0 5px;font-weight:400}
 .header-right{text-align:right}
-.header-plan{font-family:var(--font-h);font-size:14px;font-weight:600;color:var(--fg)}
-.header-season{font-size:11px;color:var(--fg-muted);margin-top:1px}
-.sync-pill{
-  display:inline-flex;align-items:center;gap:5px;
-  font-size:11px;font-weight:500;padding:3px 9px;border-radius:20px;
-  background:var(--surface-2);border:1px solid var(--border);color:var(--fg-muted);
-  transition:all .3s;
+.header-plan{
+  font-family:var(--font-h);font-size:14px;font-weight:600;
+  color:var(--fg);
 }
-.sync-pill.live{background:#DCFCE7;border-color:#86EFAC;color:#166534}
-.sync-pill.saving{background:#FEF9C3;border-color:#FDE047;color:#713F12}
-.sync-pill.error{background:var(--s-urg-bg);border-color:var(--s-urg-fg);color:var(--s-urg-fg)}
-.sync-dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0}
-@media(prefers-color-scheme:dark){
-  .sync-pill.live{background:#052E16;border-color:#34D399;color:#34D399}
-  .sync-pill.saving{background:#422006;border-color:#FCD34D;color:#FCD34D}
+.header-season{font-size:11px;color:var(--fg-muted);margin-top:1px}
+.sync-dot{
+  display:inline-block;width:7px;height:7px;border-radius:50%;
+  background:var(--fg-sub);margin-left:6px;vertical-align:middle;
+  transition:background .3s;
+}
+.sync-dot.live{background:#22C55E}
+.sync-dot.saving{background:#F59E0B}
+.sync-dot.error{background:var(--s-urg-fg)}
+
+/* ── MODE TOGGLE ─────────────────────────────────────────────── */
+.mode-toggle-btn{
+  display:flex;align-items:center;gap:6px;
+  font-family:var(--font-h);font-size:12px;font-weight:600;letter-spacing:.01em;
+  padding:7px 14px;border-radius:20px;
+  border:1.5px solid var(--border);
+  background:var(--surface-2);color:var(--fg-muted);
+  cursor:pointer;transition:all .15s;white-space:nowrap;
+}
+.mode-toggle-btn:hover{border-color:var(--accent);color:var(--accent)}
+.mode-toggle-btn svg{flex-shrink:0;transition:transform .2s}
+
+/* ── EXEC BANNER ─────────────────────────────────────────────── */
+.exec-banner{
+  display:none;
+  background:var(--accent);color:#fff;
+  font-family:var(--font-h);font-size:12px;font-weight:500;
+  text-align:center;padding:6px 16px;letter-spacing:.03em;
 }
 
 /* ── TABS ────────────────────────────────────────────────────── */
-.tab-nav{background:var(--surface);border-bottom:1px solid var(--border);display:flex;padding:0 20px;overflow-x:auto}
-.tab-btn{font-family:var(--font-h);font-size:13px;font-weight:500;color:var(--fg-muted);background:none;border:none;border-bottom:2px solid transparent;padding:10px 16px;transition:color .15s,border-color .15s;white-space:nowrap}
+.tab-nav{
+  background:var(--surface);border-bottom:1px solid var(--border);
+  display:flex;padding:0 max(16px,env(safe-area-inset-left,0px));overflow-x:auto;
+}
+.tab-btn{
+  font-family:var(--font-h);font-size:13px;font-weight:500;
+  color:var(--fg-muted);background:none;border:none;
+  border-bottom:2px solid transparent;padding:10px 16px;
+  transition:color .15s,border-color .15s,font-size .2s,padding .2s;white-space:nowrap;
+}
 .tab-btn:hover{color:var(--fg)}
 .tab-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
 .tab-panel{display:none}.tab-panel.active{display:block}
 
 /* ── FILTERS ─────────────────────────────────────────────────── */
-.filters{background:var(--surface);border-bottom:1px solid var(--border-lite);padding:9px 20px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.filters{
+  background:var(--surface);border-bottom:1px solid var(--border-lite);
+  padding:9px max(16px,env(safe-area-inset-left,0px));
+  display:flex;gap:12px;flex-wrap:wrap;align-items:center;
+  transition:max-height .2s, opacity .2s;
+}
 .filter-label{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--fg-sub)}
 .filter-pills{display:flex;gap:5px;flex-wrap:wrap}
-.pill{font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;border:1px solid var(--border);background:var(--surface-2);color:var(--fg-muted);cursor:pointer;transition:all .12s;user-select:none}
+.pill{
+  font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;
+  border:1px solid var(--border);background:var(--surface-2);color:var(--fg-muted);
+  cursor:pointer;transition:all .12s;user-select:none;
+}
 .pill:hover{border-color:var(--accent);color:var(--accent)}
 .pill.active{background:var(--accent);border-color:var(--accent);color:#fff}
 
 /* ── INNER ───────────────────────────────────────────────────── */
-.inner{padding:18px 20px;display:flex;flex-direction:column;gap:12px}
+.inner{padding:18px max(16px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:12px}
 
 /* ── SUMMARY ─────────────────────────────────────────────────── */
 .stat-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px}
@@ -144,40 +196,12 @@ button{cursor:pointer;font-family:inherit}
 .table-scroll{overflow-x:auto}
 .g-table,.grilla-table{width:100%;border-collapse:collapse;font-size:13px}
 .g-table th,.grilla-table th{font-family:var(--font-h);font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--fg-sub);padding:7px 10px;text-align:left;background:var(--surface-2);border-bottom:1px solid var(--border);white-space:nowrap}
-.g-table td,.grilla-table td{padding:7px 10px;border-bottom:1px solid var(--border-lite);vertical-align:middle}
+.g-table td,.grilla-table td{padding:9px 10px;border-bottom:1px solid var(--border-lite);vertical-align:top}
 .g-table tr:last-child td,.grilla-table tr:last-child td{border-bottom:none}
 .g-table tr:hover td,.grilla-table tr:hover td{background:var(--surface-2)}
 tr[data-hidden="true"]{display:none}
 .item-name{font-weight:500;color:var(--fg)}
 .hito-badge{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;background:var(--s-ges-bg);color:var(--s-ges-fg);border-radius:4px;padding:1px 5px;vertical-align:middle;margin-left:5px}
-.item-notes{font-size:11.5px;color:var(--fg-muted);margin-top:3px;line-height:1.4;overflow:hidden;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;max-width:280px}
-.grilla-desc{display:none}
-.gantt-tipo,.grilla-pilar,.grilla-hitos{display:none}
-/* ── CALENDAR ────────────────────────────────────────────────── */
-.cal-nav-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;justify-content:space-between}
-.cal-title{font-family:var(--font-h);font-size:16px;font-weight:600;color:var(--fg)}
-.cal-nav-btn{background:none;border:1px solid var(--border);border-radius:6px;padding:5px 14px;color:var(--fg);font-size:14px;cursor:pointer;transition:border-color .12s}
-.cal-nav-btn:hover{border-color:var(--accent);color:var(--accent)}
-.cal-grid-wrap{padding:14px 16px}
-.cal-days-hdr{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:6px}
-.cal-dlabel{text-align:center;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--fg-sub);padding:3px 0}
-.cal-week{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:4px}
-.cal-cell{min-height:64px;background:var(--surface);border:1px solid var(--border-lite);border-radius:6px;padding:5px 6px;cursor:pointer;transition:border-color .12s,background .12s}
-.cal-cell:hover{border-color:var(--accent)}
-.cal-empty{background:transparent!important;border-color:transparent!important;cursor:default;pointer-events:none}
-.cal-today{border-color:var(--accent);background:var(--accent-lite)}
-.cal-sel{border-color:var(--accent);border-width:2px}
-.cal-dn{font-size:12px;font-weight:600;color:var(--fg-muted);line-height:1;margin-bottom:5px}
-.cal-today .cal-dn{color:var(--accent-txt);font-weight:700}
-.cal-dots{display:flex;flex-wrap:wrap;gap:3px;align-items:center}
-.cal-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-.cal-more{font-size:9px;color:var(--fg-sub);font-weight:600;line-height:1}
-.cal-panel{margin:0 16px 16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
-.cal-panel-hdr{font-family:var(--font-h);font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--fg-sub);padding:9px 14px;border-bottom:1px solid var(--border-lite);background:var(--surface-2)}
-.cal-panel-body{padding:10px 14px;display:flex;flex-direction:column;gap:8px}
-.cal-pi{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;background:var(--surface-2)}
-.cal-link{font-size:14px;text-decoration:none;color:var(--accent);flex-shrink:0}
-@media(max-width:600px){.cal-cell{min-height:48px;padding:4px}.cal-dn{font-size:11px}}
 .prio{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px}
 .prio-urgente{background:#EF4444}.prio-alta{background:#F59E0B}
 .prio-media{background:#22C55E}.prio-baja{background:#94A3B8}
@@ -251,11 +275,156 @@ tr[data-hidden="true"]{display:none}
 .reset-link button{background:none;border:none;color:inherit;text-decoration:underline;font-size:inherit;cursor:pointer}
 .reset-link button:hover{color:var(--s-urg-fg)}
 .empty{padding:24px;text-align:center;color:var(--fg-muted);font-size:13px}
+.sync-bar{background:var(--accent-lite);border-bottom:1px solid var(--accent);padding:7px max(16px,env(safe-area-inset-left,0px));font-size:12px;color:var(--accent-txt);display:none;align-items:center;gap:8px}
+.sync-bar.show{display:flex}
 
-/* ── SETUP BANNER ────────────────────────────────────────────── */
-.setup-banner{background:#FEF3C7;border:2px dashed #F59E0B;border-radius:var(--radius);padding:14px 18px;font-size:13px;color:#78350F;line-height:1.6;margin:16px 20px}
-.setup-banner strong{font-family:var(--font-h);font-weight:700;font-size:14px;display:block;margin-bottom:6px}
-.setup-banner code{background:#FDE68A;padding:1px 5px;border-radius:3px;font-size:12px}
+/* ── EXEC ONLY / TEAM ONLY ───────────────────────────────────── */
+.exec-only{display:none}
+body[data-mode="exec"] .exec-only{display:block}
+body[data-mode="exec"] .team-only{display:none!important}
+
+/* ── EXEC — HEADER OVERRIDES ─────────────────────────────────── */
+body[data-mode="exec"] .header{border-bottom:2px solid var(--accent)}
+body[data-mode="exec"] .header-brand{font-size:20px}
+body[data-mode="exec"] .header-plan{font-size:17px}
+body[data-mode="exec"] .header-season{font-size:13px}
+body[data-mode="exec"] .mode-toggle-btn{background:var(--accent);border-color:var(--accent);color:#fff}
+body[data-mode="exec"] .exec-banner{display:block}
+body[data-mode="exec"] .tab-btn{font-size:15px;padding:14px 20px}
+
+/* ── EXEC — GLOBAL OVERRIDES ─────────────────────────────────── */
+body[data-mode="exec"]{font-size:16px;--fg-muted:#5A5248}
+body[data-mode="exec"] .btn-edit,
+body[data-mode="exec"] .btn-add{display:none!important}
+body[data-mode="exec"] .filters{display:none!important}
+body[data-mode="exec"] .phase-name{font-size:16px}
+body[data-mode="exec"] .phase-period{font-size:13px}
+body[data-mode="exec"] .phase-num{font-size:13px}
+body[data-mode="exec"] .item-name{font-size:16px}
+body[data-mode="exec"] .item-notes{font-size:13px}
+body[data-mode="exec"] .badge{font-size:13px;padding:5px 13px}
+body[data-mode="exec"] .chip{font-size:13px;padding:4px 11px}
+body[data-mode="exec"] .date-cell{font-size:14px}
+body[data-mode="exec"] .hito-badge{font-size:11px;padding:2px 8px}
+body[data-mode="exec"] .g-table td,
+body[data-mode="exec"] .grilla-table td{padding:14px 12px;font-size:15px}
+body[data-mode="exec"] .g-table th,
+body[data-mode="exec"] .grilla-table th{font-size:12px;padding:11px 12px}
+
+/* ── EXEC — GANTT TABLE: ocultar col 1(prio), 3(tipo), 7(editar) */
+body[data-mode="exec"] .g-table th:nth-child(1),
+body[data-mode="exec"] .g-table td:nth-child(1),
+body[data-mode="exec"] .g-table th:nth-child(3),
+body[data-mode="exec"] .g-table td:nth-child(3),
+body[data-mode="exec"] .g-table th:nth-child(7),
+body[data-mode="exec"] .g-table td:nth-child(7){display:none}
+
+/* ── EXEC — GRILLA TABLE: ocultar col 1(id),3(pilar),4(formato),5(desc),10(hitos),12(editar) */
+body[data-mode="exec"] .grilla-table th:nth-child(1),
+body[data-mode="exec"] .grilla-table td:nth-child(1),
+body[data-mode="exec"] .grilla-table th:nth-child(3),
+body[data-mode="exec"] .grilla-table td:nth-child(3),
+body[data-mode="exec"] .grilla-table th:nth-child(4),
+body[data-mode="exec"] .grilla-table td:nth-child(4),
+body[data-mode="exec"] .grilla-table th:nth-child(5),
+body[data-mode="exec"] .grilla-table td:nth-child(5),
+body[data-mode="exec"] .grilla-table th:nth-child(10),
+body[data-mode="exec"] .grilla-table td:nth-child(10),
+body[data-mode="exec"] .grilla-table th:nth-child(12),
+body[data-mode="exec"] .grilla-table td:nth-child(12){display:none}
+
+/* ── EXEC RESUMEN ─────────────────────────────────────────────── */
+.exec-hero{
+  display:grid;grid-template-columns:auto 1fr;gap:0;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);overflow:hidden;
+}
+.exec-countdown{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:28px 32px;border-right:1px solid var(--border);
+  background:var(--accent-lite);text-align:center;
+}
+.exec-countdown-num{
+  font-family:var(--font-h);font-size:64px;font-weight:700;
+  color:var(--accent);line-height:1;font-variant-numeric:tabular-nums;
+}
+.exec-countdown-label{
+  font-size:16px;color:var(--accent-txt);margin-top:6px;line-height:1.3;
+}
+.exec-countdown-date{
+  font-family:var(--font-h);font-size:13px;font-weight:600;
+  color:var(--accent);margin-top:10px;
+  background:var(--surface);border-radius:20px;padding:4px 14px;
+  border:1px solid var(--accent);
+}
+.exec-qs-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:0;
+}
+.exec-qs-card{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:28px 20px;text-align:center;border-right:1px solid var(--border);
+}
+.exec-qs-card:last-child{border-right:none}
+.exec-qs-num{
+  font-family:var(--font-h);font-size:42px;font-weight:700;
+  color:var(--fg);line-height:1;font-variant-numeric:tabular-nums;
+}
+.exec-qs-urgent .exec-qs-num{color:var(--s-urg-fg)}
+.exec-qs-label{font-size:15px;color:var(--fg-muted);margin-top:8px;line-height:1.3}
+.exec-qs-urgent{background:var(--s-urg-bg)}
+
+.exec-block{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);overflow:hidden;
+}
+.exec-block-urgent{border-color:var(--s-urg-fg)}
+.exec-block-title{
+  font-family:var(--font-h);font-size:16px;font-weight:600;color:var(--fg);
+  padding:16px 20px;border-bottom:1px solid var(--border-lite);
+  background:var(--surface-2);
+}
+.exec-block-urgent .exec-block-title{
+  color:var(--s-urg-fg);background:var(--s-urg-bg);
+  border-bottom-color:color-mix(in srgb,var(--s-urg-fg) 20%,transparent);
+}
+.exec-item-row{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:12px;padding:16px 20px;border-bottom:1px solid var(--border-lite);
+  flex-wrap:wrap;
+}
+.exec-item-row:last-child{border-bottom:none}
+.exec-item-name{font-size:16px;font-weight:500;color:var(--fg);flex:1;min-width:0}
+.exec-item-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+
+.exec-hito-card{
+  padding:18px 20px;border-bottom:1px solid var(--border-lite);
+  display:flex;flex-direction:column;gap:10px;
+}
+.exec-hito-card:last-child{border-bottom:none}
+.exec-hito-phase{
+  display:inline-block;font-family:var(--font-h);font-size:11px;font-weight:700;
+  letter-spacing:.03em;padding:3px 12px;border-radius:20px;align-self:flex-start;
+}
+.exec-hito-name{
+  font-family:var(--font-h);font-size:18px;font-weight:600;
+  color:var(--fg);line-height:1.3;
+}
+.exec-hito-footer{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+
+.exec-note{
+  background:var(--accent-lite);border:1px solid var(--accent);
+  border-radius:var(--radius);padding:18px 20px;font-size:16px;
+  color:var(--accent-txt);line-height:1.7;
+}
+.exec-note strong{font-family:var(--font-h);font-weight:600}
+
+@media(max-width:680px){
+  .exec-hero{grid-template-columns:1fr}
+  .exec-countdown{border-right:none;border-bottom:1px solid var(--border)}
+  .exec-qs-grid{grid-template-columns:1fr 1fr}
+  .exec-qs-card:nth-child(2){border-right:none}
+  .exec-qs-card:nth-child(3){grid-column:span 2;border-top:1px solid var(--border)}
+}
 
 @media(max-width:600px){
   .header{flex-direction:column;align-items:flex-start}
@@ -264,13 +433,18 @@ tr[data-hidden="true"]{display:none}
   .g-table th:nth-child(3),.g-table td:nth-child(3){display:none}
 }
 </style>
-</head>
-<body>
 
 <div class="app">
   <header class="header">
-    <div class="header-brand">BLW<span class="sep">&lt;&gt;</span>Hypnos
-      <span class="sync-pill" id="syncPill"><span class="sync-dot"></span><span id="syncLabel">Cargando...</span></span>
+    <div class="header-left">
+      <div class="header-brand">BLW<span class="sep">&lt;&gt;</span>Hypnos<span class="sync-dot" id="syncDot" title="Estado de sincronización"></span></div>
+      <button id="modeToggle" class="mode-toggle-btn" onclick="toggleMode()" title="Cambiar a vista simplificada">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M7 2.5C4.2 2.5 1.8 4.6 1 7c.8 2.4 3.2 4.5 6 4.5s5.2-2.1 6-4.5C12.2 4.6 9.8 2.5 7 2.5z" stroke="currentColor" stroke-width="1.3" fill="none"/>
+          <circle cx="7" cy="7" r="2" fill="currentColor"/>
+        </svg>
+        <span id="modeLabel">Vista ejecutiva</span>
+      </button>
     </div>
     <div class="header-right">
       <div class="header-plan">Plan de lanzamiento y consolidación</div>
@@ -278,12 +452,13 @@ tr[data-hidden="true"]{display:none}
     </div>
   </header>
 
+  <div class="exec-banner">Modo ejecutivo — vista simplificada para presentar</div>
+  <div class="sync-bar" id="syncBar"></div>
 
   <nav class="tab-nav">
     <button class="tab-btn active" data-target="resumen">Resumen</button>
     <button class="tab-btn" data-target="gantt">Carta Gantt</button>
     <button class="tab-btn" data-target="grilla">Grilla de Contenidos</button>
-    <button class="tab-btn" data-target="cal">Calendario</button>
   </nav>
 
   <section class="tab-panel active" id="panel-resumen">
@@ -302,7 +477,6 @@ tr[data-hidden="true"]{display:none}
         <span class="pill" data-filter="pendiente">Pendiente</span>
         <span class="pill" data-filter="postergado">Postergado</span>
         <span class="pill" data-filter="publicado">Publicado</span>
-        <span class="pill" data-filter="!publicado" title="Excluir publicados">≠ Publicado</span>
       </div>
       <span class="filter-label">Responsable</span>
       <div class="filter-pills" id="fp-gantt">
@@ -316,10 +490,6 @@ tr[data-hidden="true"]{display:none}
     <div class="inner" id="gantt-container"></div>
   </section>
 
-  <section class="tab-panel" id="panel-cal">
-    <div id="cal-container"></div>
-  </section>
-
   <section class="tab-panel" id="panel-grilla">
     <div class="filters">
       <span class="filter-label">Estado</span>
@@ -330,7 +500,6 @@ tr[data-hidden="true"]{display:none}
         <span class="pill" data-filter="guion">Guión</span>
         <span class="pill" data-filter="pendiente">Pendiente</span>
         <span class="pill" data-filter="postergado">Postergado</span>
-        <span class="pill" data-filter="!publicado" title="Excluir publicados">≠ Publicado</span>
       </div>
       <span class="filter-label">Canal</span>
       <div class="filter-pills" id="fc-grilla">
@@ -362,9 +531,9 @@ tr[data-hidden="true"]{display:none}
 
 <script>
 /* ================================================================
-   DEFAULT DATA — base de datos inicial. Se sube a Firebase la
-   primera vez que alguien abre la página y no hay datos en la DB.
-   Para cambiar el contenido base, edita aquí y abre en "?reset=1"
+   DEFAULT DATA — editar aquí para cambios permanentes en el archivo.
+   En el navegador, los cambios se sincronizan en tiempo real entre
+   todos los usuarios que tengan el link (via db compartida).
    ================================================================ */
 const DEFAULT_DATA = {
   gantt: [
@@ -375,7 +544,7 @@ const DEFAULT_DATA = {
         {id:"G02",name:"Carrusel Sensación",type:"Contenido",resp:["Sofía"],fecha:"07/10/2026",status:"publicado",prio:"alta",hito:false,notes:"Publicado en Hypnos IG."},
         {id:"G03",name:"Video Lanzamiento — Marcelo presenta la alianza",type:"Contenido",resp:["Sofía","Marcelo"],fecha:"15/10/2026",status:"publicado",prio:"alta",hito:true,notes:"Reel. Marcelo habla por qué de la alianza. Primer contenido de profundidad."},
         {id:"G04",name:"Video Trini (huésped real, conoce el lugar)",type:"Contenido",resp:["Regina"],fecha:"26/10/2026",status:"en-edicion",prio:"alta",hito:false,notes:"Reel. Voces reales / huéspedes. BLW sube, Hypnos colabora."},
-        {id:"G05",name:"Video Propósito — origen, dos miradas, valores compartidos",type:"Contenido",resp:["Sofía","Regina"],fecha:"03/11/2026",status:"en-edicion",prio:"alta",hito:true,notes:"Reel. Profundidad — Detrás de la alianza."},
+        {id:"G05",name:"Video Propósito — origen, dos miradas, valores compartidos",type:"Contenido",resp:["Sofía","Regina"],fecha:"03/11/2026",status:"en-edicion",prio:"alta",hito:true,notes:"Reel. Profundidad — Detrás de la alianza. Proceso de construcción y valores."},
         {id:"G06",name:"Video Trini 2 — importancia de la experiencia para la comunidad",type:"Contenido",resp:["Regina"],fecha:"10/11/2026",status:"pendiente",prio:"media",hito:false,notes:"Reel. Voces reales. BLW sube, Hypnos colabora."},
         {id:"G07",name:"Video Trini 3 — Wellness",type:"Contenido",resp:["Regina"],fecha:"17/11/2026",status:"pendiente",prio:"media",hito:false,notes:"Reel. Wellness. BLW sube, Hypnos colabora."},
         {id:"G08",name:"Video Productos Posicionados — ritual del descanso",type:"Contenido",resp:["Sofía"],fecha:"24/11/2026",status:"guion",prio:"alta",hito:false,notes:"Reel. Deseo — mostrar sensorialmente. Guión listo, falta producción."}
@@ -386,21 +555,21 @@ const DEFAULT_DATA = {
       items:[
         {id:"G09",name:"Enviar logo Hypnos a Tecnofast",type:"Gestión",resp:["Tomás"],fecha:"URGENTE",status:"urgente",prio:"urgente",hito:false,notes:"Tecnofast necesita el logo para los módulos y materiales impresos. Acción inmediata."},
         {id:"G10",name:"Marcelo envía videos huéspedes tiny by Hypnos",type:"Gestión",resp:["Marcelo"],fecha:"14/11/2026",status:"pendiente",prio:"alta",hito:false,notes:"Especialmente el video de la doctora especialista en zonas azules certificada."},
-        {id:"G11",name:"Video Mantas de Peso — IA tipo bambú (beneficios explícitos)",type:"Contenido",resp:["Sofía"],fecha:"21/11/2026",status:"pendiente",prio:"alta",hito:false,notes:"Referencia del video bambú ya existe. Manta de peso como producto estrella."},
-        {id:"G12",name:"Comunicación de suspenso — estamos trabajando en algo",type:"Contenido",resp:["Sofía","Regina"],fecha:"25/11/2026",status:"pendiente",prio:"alta",hito:false,notes:"Stories / posts de anticipación. BLW como laboratorio."},
-        {id:"G13",name:"Definir estado del concurso — dinámica, tótems, POP, códigos",type:"Gestión",resp:["Tomás"],fecha:"14/11/2026",status:"pendiente",prio:"urgente",hito:false,notes:"Premio: fin de semana en BLW + set de productos Hypnos."},
-        {id:"G14",name:"Definir rostro oficial de la campaña",type:"Estrategia",resp:["Tomás"],fecha:"21/11/2026",status:"pendiente",prio:"alta",hito:false,notes:"Alguien que comunique orgánicamente la alianza. Considerar doctora zonas azules."},
-        {id:"G15",name:"Estrategia alianza BLW × Tecnofast — pendiente",type:"Estrategia",resp:["Tomás"],fecha:"15/11/2026",status:"en-gestion",prio:"alta",hito:false,notes:"Tecnofast: tiny cabin de autor con arquitectos. Sus módulos en BLW tienen productos Hypnos."},
-        {id:"G16",name:"Reunión estrategia final — calendar Sofía y Regina",type:"Estrategia",resp:["Sofía","Regina","Tomás"],fecha:"18/11/2026",status:"pendiente",prio:"urgente",hito:true,notes:"Aterrizar la estrategia final. Alinear calendar de contenidos entre ambas marcas."}
+        {id:"G11",name:"Video Mantas de Peso — IA tipo bambú (beneficios explícitos)",type:"Contenido",resp:["Sofía"],fecha:"21/11/2026",status:"pendiente",prio:"alta",hito:false,notes:"Referencia del video bambú ya existe. Ser mucho más explícito con los beneficios. Manta de peso como producto estrella."},
+        {id:"G12",name:"Comunicación de suspenso — estamos trabajando en algo",type:"Contenido",resp:["Sofía","Regina"],fecha:"25/11/2026",status:"pendiente",prio:"alta",hito:false,notes:"Stories / posts de anticipación. BLW como laboratorio. El suspenso genera expectativa antes del lanzamiento oficial."},
+        {id:"G13",name:"Definir estado del concurso — dinámica, tótems, POP, códigos",type:"Gestión",resp:["Tomás"],fecha:"14/11/2026",status:"pendiente",prio:"urgente",hito:false,notes:"Premio: fin de semana en BLW + set de productos Hypnos. Definir: dinámica exacta, materiales POP, tótems en PdV, códigos QR."},
+        {id:"G14",name:"Definir rostro oficial de la campaña",type:"Estrategia",resp:["Tomás"],fecha:"21/11/2026",status:"pendiente",prio:"alta",hito:false,notes:"Alguien que comunique orgánicamente la alianza. Considerar doctora zonas azules u otro perfil wellness."},
+        {id:"G15",name:"Estrategia alianza BLW × Tecnofast — pendiente",type:"Estrategia",resp:["Tomás"],fecha:"15/11/2026",status:"en-gestion",prio:"alta",hito:false,notes:"Tecnofast: tiny cabin de autor con arquitectos. Sus módulos en BLW tienen productos Hypnos. Formalizar vínculo."},
+        {id:"G16",name:"Reunión estrategia final — calendar Sofía y Regina",type:"Estrategia",resp:["Sofía","Regina","Tomás"],fecha:"18/11/2026",status:"pendiente",prio:"urgente",hito:true,notes:"Aterrizar la estrategia final. Alinear calendar de contenidos entre ambas marcas para la campaña de verano."}
       ]
     },
     {
       phase:"FASE 3 — Lanzamiento Verano",num:"03",period:"Dic 2026",color:"#7C3AED",
       items:[
-        {id:"G17",name:"Reel llegada a Buda Lodge — video épico de lanzamiento",type:"Contenido",resp:["Sofía","Regina"],fecha:"01/12/2026",status:"pendiente",prio:"urgente",hito:true,notes:"El video de lanzamiento. Con todos los productos Hypnos en el lodge."},
-        {id:"G18",name:"Video Hero — Esta es toda nuestra experiencia Hypnos, y hoy la puedes vivir en Buda Lodge",type:"Contenido",resp:["Sofía","Regina"],fecha:"08/12/2026",status:"pendiente",prio:"urgente",hito:true,notes:"El video más potente de la campaña."},
+        {id:"G17",name:"Reel llegada a Buda Lodge — video épico de lanzamiento",type:"Contenido",resp:["Sofía","Regina"],fecha:"01/12/2026",status:"pendiente",prio:"urgente",hito:true,notes:"El video de lanzamiento. Con todos los productos Hypnos en el lodge. Inicio de la campaña de verano."},
+        {id:"G18",name:"Video Hero — Esta es toda nuestra experiencia Hypnos, y hoy la puedes vivir en Buda Lodge",type:"Contenido",resp:["Sofía","Regina"],fecha:"08/12/2026",status:"pendiente",prio:"urgente",hito:true,notes:"El video más potente de la campaña. Mezcla de todos los productos Hypnos y la experiencia completa se vive en BLW."},
         {id:"G19",name:"Concurso lanzamiento — fin de semana BLW + canje Hypnos",type:"Campaña",resp:["Sofía","Regina"],fecha:"15/12/2026",status:"pendiente",prio:"urgente",hito:true,notes:"Premio: fin de semana en BLW + set de productos Hypnos. Presencia en PdV con tótems y POP."},
-        {id:"G20",name:"Integrar alianza en tienda Hypnos — web y Shopify",type:"Digital",resp:["Tomás","Sofía"],fecha:"05/12/2026",status:"pendiente",prio:"alta",hito:false,notes:"BLW como vitrina de producto Hypnos. Landing page de la alianza."},
+        {id:"G20",name:"Integrar alianza en tienda Hypnos — web y Shopify",type:"Digital",resp:["Tomás","Sofía"],fecha:"05/12/2026",status:"pendiente",prio:"alta",hito:false,notes:"BLW como vitrina de producto Hypnos. Landing page de la alianza. Incluir en menú y en página de producto."},
         {id:"G21",name:"Mailing campaña verano (Klaviyo)",type:"Digital",resp:["Sofía"],fecha:"10/12/2026",status:"pendiente",prio:"alta",hito:false,notes:"Email marketing para base de datos Hypnos. Comunicar la alianza con BLW y el concurso."},
         {id:"G22",name:"Contenido productos con fotos 3D y detalle",type:"Contenido",resp:["Sofía"],fecha:"20/12/2026",status:"pendiente",prio:"media",hito:false,notes:"Carruseles con las fotos 3D que ya tenemos."}
       ]
@@ -408,9 +577,9 @@ const DEFAULT_DATA = {
     {
       phase:"FASE 4 — Verano y Consolidación",num:"04",period:"Ene–Mar 2027",color:"#C2410C",
       items:[
-        {id:"G23",name:"Contenido verano BLW — lodge sube, Hypnos colabora",type:"Contenido",resp:["Sofía","Regina"],fecha:"10/01/2027",status:"pendiente",prio:"alta",hito:false,notes:"Regla editorial: contenido del lodge → BLW sube, Hypnos colabora."},
+        {id:"G23",name:"Contenido verano BLW — lodge sube, Hypnos colabora",type:"Contenido",resp:["Sofía","Regina"],fecha:"10/01/2027",status:"pendiente",prio:"alta",hito:false,notes:"Regla editorial: contenido del lodge → BLW sube, Hypnos colabora. Contenido de producto → Hypnos sube."},
         {id:"G24",name:"Marcelo como referente del turismo wellness",type:"Estrategia",resp:["Sofía","Marcelo"],fecha:"20/01/2027",status:"pendiente",prio:"alta",hito:true,notes:"Posicionar a Marcelo (fundador BLW) como voz autorizada en turismo wellness nacional."},
-        {id:"G25",name:"Estrategia Zonas Azules — doctora especialista certificada",type:"Estrategia",resp:["Tomás","Sofía"],fecha:"15/01/2027",status:"pendiente",prio:"alta",hito:false,notes:"Integrar narrativa de zonas azules. Doctora certificada como voz de autoridad científica."},
+        {id:"G25",name:"Estrategia Zonas Azules — doctora especialista certificada",type:"Estrategia",resp:["Tomás","Sofía"],fecha:"15/01/2027",status:"pendiente",prio:"alta",hito:false,notes:"Integrar narrativa de zonas azules. Doctora certificada como voz de autoridad científica para Hypnos."},
         {id:"G26",name:"Retiro enero/febrero con Jose (Asana)",type:"Evento",resp:["Tomás"],fecha:"25/01/2027",status:"pendiente",prio:"media",hito:false,notes:"Retiro en BLW. Contenido para ambas marcas."}
       ]
     }
@@ -425,7 +594,7 @@ const DEFAULT_DATA = {
     {id:"C07",name:"Video Trini 3",pilar:"Wellness",formato:"Reel",desc:"Wellness",canal:"BLW",resp:["Regina"],fecha:"17/11/2026",status:"pendiente",hitoBlw:false,hitoHypnos:false,link:"",notes:"BLW sube, Hypnos colabora"},
     {id:"C08",name:"Video Productos Posicionados",pilar:"Deseo — Ritual del descanso",formato:"Reel",desc:"Mostrar sensorialmente la experiencia en el lodge",canal:"Hypnos",resp:["Sofía"],fecha:"24/11/2026",status:"guion",hitoBlw:false,hitoHypnos:true,link:"https://www.instagram.com/reel/DS4IdlliB8J/",notes:"Guión listo. Falta producción."},
     {id:"C09",name:"Video Mantas de Peso — IA tipo bambú",pilar:"Deseo — Producto estrella",formato:"Reel",desc:"Beneficios explícitos de la manta de peso",canal:"Hypnos",resp:["Sofía"],fecha:"21/11/2026",status:"pendiente",hitoBlw:false,hitoHypnos:true,link:"",notes:"Referencia video bambú ya existe."},
-    {id:"C10",name:"Video Huéspedes Tiny by Hypnos",pilar:"Voces reales / Huéspedes",formato:"Reel",desc:"Huéspedes reales en tiny cabin con productos Hypnos",canal:"Hypnos",resp:["Marcelo"],fecha:"14/11/2026",status:"pendiente",hitoBlw:false,hitoHypnos:true,link:"",notes:"Marcelo envía los videos. Especialmente la doctora zonas azules."},
+    {id:"C10",name:"Video Huéspedes Tiny by Hypnos",pilar:"Voces reales / Huéspedes",formato:"Reel",desc:"Huéspedes reales en tiny cabin con productos Hypnos",canal:"Hypnos",resp:["Marcelo"],fecha:"14/11/2026",status:"pendiente",hitoBlw:false,hitoHypnos:true,link:"",notes:"Marcelo envía los videos. Especialmente la doctora especialista en zonas azules."},
     {id:"C11",name:"Comunicación Suspenso",pilar:"Anticipación",formato:"Stories / Post",desc:"Estamos trabajando en algo",canal:"Ambos",resp:["Sofía","Regina"],fecha:"25/11/2026",status:"pendiente",hitoBlw:false,hitoHypnos:false,link:"",notes:"Ambas cuentas. Mismo suspenso, distintos ángulos."},
     {id:"C12",name:"Reel llegada a Buda Lodge",pilar:"Hito de alianza",formato:"Reel",desc:"El video potente de lanzamiento. Todos los productos Hypnos en el lodge.",canal:"Ambos",resp:["Sofía","Regina"],fecha:"01/12/2026",status:"pendiente",hitoBlw:true,hitoHypnos:true,link:"",notes:"Hito máximo. Inicio campaña de verano."},
     {id:"C13",name:"Video Hero — Experiencia Hypnos en Buda Lodge",pilar:"Propósito — Hero de campaña",formato:"Reel",desc:"Esta es toda nuestra experiencia Hypnos, y hoy la puedes vivir en Buda Lodge",canal:"Hypnos",resp:["Sofía","Regina"],fecha:"08/12/2026",status:"pendiente",hitoBlw:true,hitoHypnos:true,link:"",notes:"El video más potente de la campaña."},
@@ -438,73 +607,23 @@ const DEFAULT_DATA = {
 
 /* ── STATE ───────────────────────────────────────────────────── */
 const LS_KEY = "blw-hypnos-plan-v2";
+const LS_MODE = "blw-hypnos-view-mode";
 let D = null;
-const GS_CONFIGURED = SCRIPT_URL !== "PEGA_LA_URL_DEL_APPS_SCRIPT_AQUI";
-
-function setSyncPill(state, text){
-  const pill = document.getElementById("syncPill");
-  const label = document.getElementById("syncLabel");
-  if(!pill) return;
-  pill.className = "sync-pill" + (state ? " " + state : "");
-  if(label) label.textContent = text || "";
-}
-
-async function remoteLoad(){
-  if(!GS_CONFIGURED) return null;
-  try {
-    const r = await fetch(SCRIPT_URL);
-    if(!r.ok) return null;
-    const data = await r.json();
-    return (data && data.gantt && data.grilla) ? data : null;
-  } catch(e){ return null; }
-}
-
-async function remoteSave(d){
-  if(!GS_CONFIGURED) return false;
-  try {
-    // Sin Content-Type header → text/plain → no CORS preflight
-    await fetch(SCRIPT_URL, { method:"POST", body: JSON.stringify(d) });
-    return true;
-  } catch(e){ return false; }
-}
-
-async function init(){
-  setSyncPill("", "Cargando...");
-  if(GS_CONFIGURED){
-    const remote = await remoteLoad();
-    if(remote){
-      D = remote;
-      try { localStorage.setItem(LS_KEY, JSON.stringify(D)); } catch(e){}
-      setSyncPill("live", "Guardado ✓");
-    } else {
-      // Primera vez: no hay datos remotos → subir DEFAULT_DATA
-      D = loadFromLS();
-      setSyncPill("saving", "Iniciando...");
-      const ok = await remoteSave(D);
-      setSyncPill(ok?"live":"error", ok?"Guardado ✓":"Error conexión");
-    }
-  } else {
-    D = loadFromLS();
-    setSyncPill("", "Local");
-  }
-  rerenderAll();
-}
+let dbRef = null;
+let isMySave = false;
+let currentMode = 'team';
 
 function loadFromLS(){
-  if(location.search.includes("reset=1")) return JSON.parse(JSON.stringify(DEFAULT_DATA));
   try { const s=localStorage.getItem(LS_KEY); if(s) return JSON.parse(s); } catch(e){}
   return JSON.parse(JSON.stringify(DEFAULT_DATA));
 }
-
 async function saveData(d){
-  setSyncPill("saving", "Guardando...");
-  try { localStorage.setItem(LS_KEY, JSON.stringify(d)); } catch(e){}
-  if(GS_CONFIGURED){
-    const ok = await remoteSave(d);
-    setSyncPill(ok?"live":"error", ok?"Guardado ✓":"Error al guardar");
-  } else {
-    setSyncPill("", "Local");
+  isMySave = true;
+  if(dbRef){
+    try { await dbRef.set(d); } catch(e){ console.warn("DB save error",e); }
   }
+  isMySave = false;
+  try { localStorage.setItem(LS_KEY,JSON.stringify(d)); } catch(e){}
 }
 
 /* ── HELPERS ─────────────────────────────────────────────────── */
@@ -534,7 +653,47 @@ function parseDate(str){
   if(!str) return null;
   const dm=str.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
   if(dm) return new Date(+dm[3],+dm[2]-1,+dm[1]);
+  const mo={Ene:0,Feb:1,Mar:2,Abr:3,May:4,Jun:5,Jul:6,Ago:7,Sep:8,Oct:9,Nov:10,Dic:11};
+  const mm=str.match(/^(Ene|Feb|Mar|Abr|May|Jun|Jul|Ago|Sep|Oct|Nov|Dic)[^0-9]*(\d{4})/);
+  if(mm) return new Date(+mm[2],mo[mm[1]],1);
   return null;
+}
+
+function setSyncDot(state){
+  const dot=document.getElementById("syncDot");
+  if(!dot) return;
+  dot.className="sync-dot"+(state?" "+state:"");
+  dot.title={live:"Sincronizado",saving:"Guardando...",error:"Error de sincronización","":"Sin conexión en tiempo real"}[state||""]||"";
+}
+
+/* ── MODE TOGGLE ─────────────────────────────────────────────── */
+function initMode(){
+  const hash = location.hash;
+  if(hash === '#exec'){
+    currentMode = 'exec';
+  } else {
+    currentMode = localStorage.getItem(LS_MODE) || 'team';
+  }
+  applyMode(currentMode, false);
+}
+function applyMode(mode, rerender){
+  currentMode = mode;
+  document.body.dataset.mode = mode;
+  const lbl = document.getElementById('modeLabel');
+  if(lbl) lbl.textContent = mode === 'exec' ? 'Vista equipo' : 'Vista ejecutiva';
+  if(rerender) rerenderAll();
+}
+function toggleMode(){
+  const next = currentMode === 'team' ? 'exec' : 'team';
+  localStorage.setItem(LS_MODE, next);
+  try {
+    if(next === 'exec'){
+      history.replaceState(null,'',location.pathname+location.search+'#exec');
+    } else {
+      history.replaceState(null,'',location.pathname+location.search);
+    }
+  } catch(e){/* srcdoc / iframe context */}
+  applyMode(next, true);
 }
 
 /* ── RENDER ALL ──────────────────────────────────────────────── */
@@ -542,71 +701,66 @@ function rerenderAll(){
   renderSummary();
   renderGantt(ganttStatus,ganttPerson);
   renderGrilla(grillaStatus,grillaCanal);
-  renderCalendar();
 }
 
-/* ── CALENDAR ────────────────────────────────────────────────── */
-let calYear=new Date().getFullYear();
-let calMonth=new Date().getMonth();
-let calSelected=null;
-const MONTHS_ES=["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
-const DAYS_ES=["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"];
+/* ── EXEC RESUMEN ────────────────────────────────────────────── */
+function buildExecResumen(all, hitoItems, urgItems, counts, inProgress){
+  const now = new Date();
+  const launch = new Date(2026, 11, 1); // 1 dic 2026
+  const daysToLaunch = Math.ceil((launch - now) / (1000*60*60*24));
+  const days = Math.max(0, daysToLaunch);
 
-function renderCalendar(){
-  if(!D) return;
-  const c=document.getElementById("cal-container"); if(!c) return;
-  const allItems=[];
-  D.gantt.forEach(p=>p.items.forEach(it=>{
-    const d=parseDate(it.fecha);
-    if(d) allItems.push({...it,_d:d,_src:"gantt",_phColor:p.color});
-  }));
-  D.grilla.forEach(it=>{
-    const d=parseDate(it.fecha);
-    if(d) allItems.push({...it,_d:d,_src:"grilla"});
-  });
-  const byDate={};
-  allItems.forEach(item=>{
-    const k=`${item._d.getFullYear()}-${item._d.getMonth()}-${item._d.getDate()}`;
-    (byDate[k]=byDate[k]||[]).push(item);
-  });
-  const firstDay=new Date(calYear,calMonth,1);
-  const lastDay=new Date(calYear,calMonth+1,0);
-  const today=new Date(); today.setHours(0,0,0,0);
-  let startDow=firstDay.getDay();
-  startDow=startDow===0?6:startDow-1;
-  const cells=[];
-  for(let i=0;i<startDow;i++) cells.push(null);
-  for(let d=1;d<=lastDay.getDate();d++) cells.push(d);
-  while(cells.length%7!==0) cells.push(null);
-  const selKey=calSelected?`${calSelected.y}-${calSelected.m}-${calSelected.d}`:null;
-  const weeks=[];
-  for(let i=0;i<cells.length;i+=7) weeks.push(cells.slice(i,i+7));
-  function dotColor(status){
-    const map={publicado:"var(--s-pub-fg)","en-edicion":"var(--s-edi-fg)",guion:"var(--s-gui-fg)",urgente:"var(--s-urg-fg)","en-gestion":"var(--s-ges-fg)",pendiente:"var(--s-pen-fg)",postergado:"var(--s-pos-fg)"};
-    return map[status]||"var(--fg-sub)";
-  }
-  const gridHTML=weeks.map(week=>`<div class="cal-week">${week.map(day=>{
-    if(!day) return`<div class="cal-cell cal-empty"></div>`;
-    const k=`${calYear}-${calMonth}-${day}`;
-    const items=byDate[k]||[];
-    const dt=new Date(calYear,calMonth,day);
-    const isToday=dt.getTime()===today.getTime();
-    const isSel=calSelected&&calSelected.y===calYear&&calSelected.m===calMonth&&calSelected.d===day;
-    const dots=items.slice(0,4).map(it=>`<span class="cal-dot" style="background:${dotColor(it.status)}" title="${esc(it.name)}"></span>`).join("")+(items.length>4?`<span class="cal-more">+${items.length-4}</span>`:"");
-    return`<div class="cal-cell${isToday?" cal-today":""}${isSel?" cal-sel":""}" data-cal-day="${day}"><div class="cal-dn">${day}</div><div class="cal-dots">${dots}</div></div>`;
-  }).join("")}</div>`).join("");
-  const selItems=selKey?(byDate[selKey]||[]):[];
-  const panelHTML=calSelected&&selItems.length?`<div class="cal-panel"><div class="cal-panel-hdr">${calSelected.d} de ${MONTHS_ES[calSelected.m]} ${calSelected.y} · ${selItems.length} ítem${selItems.length!==1?"s":""}</div><div class="cal-panel-body">${selItems.map(it=>`<div class="cal-pi"><div style="flex:1;min-width:0"><div style="font-weight:500;font-size:13px">${esc(it.name)}</div><div style="display:flex;gap:5px;margin-top:4px;align-items:center">${chips(it.resp||[])}${it._src==="gantt"?`<span class="type-tag">${esc(it.type||"")}</span>`:`<span class="type-tag">${esc(it.formato||"")}</span>`}</div></div>${badge(it.status)}${it.link?`<a href="${esc(it.link)}" target="_blank" rel="noopener" class="cal-link">↗</a>`:""}</div>`).join("")}</div></div>`:"";
-  c.innerHTML=`<div class="cal-nav-bar"><button class="cal-nav-btn" id="calPrev">←</button><span class="cal-title">${MONTHS_ES[calMonth]} ${calYear}</span><button class="cal-nav-btn" id="calNext">→</button></div><div class="cal-grid-wrap"><div class="cal-days-hdr">${DAYS_ES.map(d=>`<div class="cal-dlabel">${d}</div>`).join("")}</div><div id="calWeeks">${gridHTML}</div></div>${panelHTML}`;
-  document.getElementById("calPrev").onclick=()=>{ calMonth--; if(calMonth<0){calMonth=11;calYear--;} renderCalendar(); };
-  document.getElementById("calNext").onclick=()=>{ calMonth++; if(calMonth>11){calMonth=0;calYear++;} renderCalendar(); };
-  document.getElementById("calWeeks").addEventListener("click",e=>{
-    const cell=e.target.closest("[data-cal-day]"); if(!cell) return;
-    const day=+cell.dataset.calDay;
-    if(calSelected&&calSelected.y===calYear&&calSelected.m===calMonth&&calSelected.d===day) calSelected=null;
-    else calSelected={y:calYear,m:calMonth,d:day};
-    renderCalendar();
-  });
+  const urgHTML = urgItems.length ? `
+    <div class="exec-block exec-block-urgent">
+      <div class="exec-block-title">Requieren atención inmediata</div>
+      ${urgItems.map(it=>`
+        <div class="exec-item-row">
+          <div class="exec-item-name">${esc(it.name)}</div>
+          <div class="exec-item-meta">${chips(it.resp)}${badge(it.status)}</div>
+        </div>`).join("")}
+    </div>` : "";
+
+  const hitosHTML = hitoItems.map(it=>{
+    const ph = D.gantt.find(p=>p.items.some(x=>x.id===it.id));
+    const phaseName = ph ? ph.phase.split("—").slice(1).join("—").trim() || ph.phase : "";
+    return `
+      <div class="exec-hito-card">
+        ${ph?`<span class="exec-hito-phase" style="background:${ph.color}18;color:${ph.color};border:1px solid ${ph.color}40">${esc(phaseName)}</span>`:""}
+        <div class="exec-hito-name">${esc(it.name)}</div>
+        <div class="exec-hito-footer">${dateCell(it.fecha)}${chips(it.resp)}${badge(it.status)}</div>
+      </div>`;
+  }).join("");
+
+  return `
+    <div class="exec-hero">
+      <div class="exec-countdown">
+        <div class="exec-countdown-num">${days}</div>
+        <div class="exec-countdown-label">días al<br>lanzamiento</div>
+        <div class="exec-countdown-date">1 de diciembre 2026</div>
+      </div>
+      <div class="exec-qs-grid">
+        <div class="exec-qs-card">
+          <div class="exec-qs-num">${counts.publicado||0}</div>
+          <div class="exec-qs-label">Publicados</div>
+        </div>
+        <div class="exec-qs-card">
+          <div class="exec-qs-num">${inProgress}</div>
+          <div class="exec-qs-label">En proceso</div>
+        </div>
+        <div class="exec-qs-card${urgItems.length>0?" exec-qs-urgent":""}">
+          <div class="exec-qs-num">${urgItems.length}</div>
+          <div class="exec-qs-label">Requieren atención</div>
+        </div>
+      </div>
+    </div>
+    ${urgHTML}
+    <div class="exec-block">
+      <div class="exec-block-title">Hitos de la campaña</div>
+      ${hitosHTML}
+    </div>
+    <div class="exec-note">
+      <strong>Regla editorial:</strong> El contenido del lodge lo publica Buda Lodge, con colaboración de Hypnos. El contenido de producto lo publica Hypnos. El lanzamiento oficial es el <strong>1 de diciembre 2026.</strong>
+    </div>`;
 }
 
 /* ── SUMMARY ─────────────────────────────────────────────────── */
@@ -620,7 +774,10 @@ function renderSummary(){
   const urgItems=all.filter(it=>it.status==="urgente"||it.prio==="urgente");
   const hitoItems=all.filter(it=>it.hito);
   const now=new Date();
-  const soon=all.map(it=>({it,d:parseDate(it.fecha)})).filter(({it,d})=>d&&d>now&&it.status!=="publicado"&&it.status!=="postergado").sort((a,b)=>a.d-b.d).slice(0,5);
+  const soon=all
+    .map(it=>({it,d:parseDate(it.fecha)}))
+    .filter(({it,d})=>d&&d>now&&it.status!=="publicado"&&it.status!=="postergado")
+    .sort((a,b)=>a.d-b.d).slice(0,5);
   const byPerson={};
   PERSONS.forEach(p=>byPerson[p]=0);
   all.forEach(it=>(it.resp||[]).forEach(p=>{ if(byPerson[p]!==undefined) byPerson[p]++; }));
@@ -628,53 +785,68 @@ function renderSummary(){
   const pubGrilla=D.grilla.filter(c=>c.status==="publicado").length;
 
   document.getElementById("resumen-container").innerHTML=`
-    <div class="stat-row">
-      <div class="stat-card"><div class="stat-num">${all.length}</div><div class="stat-label">Total ítems</div></div>
-      <div class="stat-card accent"><div class="stat-num">${counts.publicado||0}</div><div class="stat-label">Publicados</div></div>
-      <div class="stat-card"><div class="stat-num">${inProgress}</div><div class="stat-label">En proceso</div></div>
-      <div class="stat-card"><div class="stat-num">${counts.pendiente||0}</div><div class="stat-label">Pendientes</div></div>
-      <div class="stat-card"><div class="stat-num">${counts.postergado||0}</div><div class="stat-label">Postergados</div></div>
-      <div class="stat-card${urgItems.length>0?" danger":""}"><div class="stat-num${urgItems.length>0?" red":""}">${urgItems.length}</div><div class="stat-label">Urgentes</div></div>
+
+    <div class="exec-only">
+      ${buildExecResumen(all, hitoItems, urgItems, counts, inProgress)}
     </div>
-    <div class="sum-row">
-      <div class="section-block">
-        <div class="section-title">Urgentes y Bloqueadores</div>
-        <div class="section-body">${urgItems.length?urgItems.map(it=>`<div class="sum-item"><div style="flex:1;min-width:0"><div class="sum-item-label">${esc(it.name)}</div><div class="sum-item-sub" style="display:flex;gap:5px;margin-top:4px">${chips(it.resp)}</div></div>${badge(it.status)}</div>`).join(""):`<div class="empty" style="padding:12px">Sin ítems urgentes</div>`}</div>
+
+    <div class="team-only">
+      <div class="stat-row">
+        <div class="stat-card"><div class="stat-num">${all.length}</div><div class="stat-label">Total ítems</div></div>
+        <div class="stat-card accent"><div class="stat-num">${counts.publicado||0}</div><div class="stat-label">Publicados</div></div>
+        <div class="stat-card"><div class="stat-num">${inProgress}</div><div class="stat-label">En proceso</div></div>
+        <div class="stat-card"><div class="stat-num">${counts.pendiente||0}</div><div class="stat-label">Pendientes</div></div>
+        <div class="stat-card"><div class="stat-num">${counts.postergado||0}</div><div class="stat-label">Postergados</div></div>
+        <div class="stat-card${urgItems.length>0?" danger":""}"><div class="stat-num${urgItems.length>0?" red":""}">${urgItems.length}</div><div class="stat-label">Urgentes</div></div>
+      </div>
+      <div class="sum-row">
+        <div class="section-block">
+          <div class="section-title">Urgentes y Bloqueadores</div>
+          <div class="section-body">
+            ${urgItems.length?urgItems.map(it=>`<div class="sum-item"><div style="flex:1;min-width:0"><div class="sum-item-label">${esc(it.name)}</div><div class="sum-item-sub" style="display:flex;gap:5px;margin-top:4px">${chips(it.resp)}</div></div>${badge(it.status)}</div>`).join(""):`<div class="empty" style="padding:12px">Sin ítems urgentes</div>`}
+          </div>
+        </div>
+        <div class="section-block">
+          <div class="section-title">Próximas Fechas</div>
+          <div class="section-body">
+            ${soon.length?soon.map(({it})=>`<div class="sum-item"><div style="flex:1;min-width:0"><div class="sum-item-label">${esc(it.name)}</div><div class="sum-item-sub" style="display:flex;align-items:center;gap:6px;margin-top:4px">${dateCell(it.fecha)}${chips(it.resp)}</div></div>${badge(it.status)}</div>`).join(""):`<div class="empty" style="padding:12px">Sin fechas próximas</div>`}
+          </div>
+        </div>
       </div>
       <div class="section-block">
-        <div class="section-title">Próximas Fechas</div>
-        <div class="section-body">${soon.length?soon.map(({it})=>`<div class="sum-item"><div style="flex:1;min-width:0"><div class="sum-item-label">${esc(it.name)}</div><div class="sum-item-sub" style="display:flex;align-items:center;gap:6px;margin-top:4px">${dateCell(it.fecha)}${chips(it.resp)}</div></div>${badge(it.status)}</div>`).join(""):`<div class="empty" style="padding:12px">Sin fechas próximas</div>`}</div>
+        <div class="section-title">Hitos de Campaña</div>
+        <div class="section-body">
+          ${hitoItems.map(it=>{const ph=D.gantt.find(p=>p.items.some(x=>x.id===it.id));return`<div class="sum-item"><div style="flex:1;min-width:0"><div class="sum-item-label">${esc(it.name)}</div><div class="sum-item-sub" style="display:flex;align-items:center;gap:6px;margin-top:4px">${ph?`<span class="type-tag" style="background:${ph.color}20;color:${ph.color}">${ph.num}</span>`:""} ${dateCell(it.fecha)} ${chips(it.resp)}</div></div>${badge(it.status)}</div>`;}).join("")}
+        </div>
       </div>
-    </div>
-    <div class="section-block">
-      <div class="section-title">Hitos de Campaña</div>
-      <div class="section-body">${hitoItems.map(it=>{const ph=D.gantt.find(p=>p.items.some(x=>x.id===it.id));return`<div class="sum-item"><div style="flex:1;min-width:0"><div class="sum-item-label">${esc(it.name)}</div><div class="sum-item-sub" style="display:flex;align-items:center;gap:6px;margin-top:4px">${ph?`<span class="type-tag" style="background:${ph.color}20;color:${ph.color}">${ph.num}</span>`:""} ${dateCell(it.fecha)} ${chips(it.resp)}</div></div>${badge(it.status)}</div>`;}).join("")}</div>
-    </div>
-    <div class="sum-row">
-      <div class="section-block">
-        <div class="section-title">Distribución por Responsable</div>
-        <div class="section-body"><div class="person-row">${PERSONS.filter(p=>byPerson[p]>0).map(p=>`<div class="person-card"><div class="person-count">${byPerson[p]}</div>${personChip(p)}</div>`).join("")}</div></div>
+      <div class="sum-row">
+        <div class="section-block">
+          <div class="section-title">Distribución por Responsable</div>
+          <div class="section-body"><div class="person-row">${PERSONS.filter(p=>byPerson[p]>0).map(p=>`<div class="person-card"><div class="person-count">${byPerson[p]}</div>${personChip(p)}</div>`).join("")}</div></div>
+        </div>
+        <div class="section-block">
+          <div class="section-title">Progreso por Fase</div>
+          <div class="section-body"><div class="phase-bar-row">${D.gantt.map(ph=>{const pub=ph.items.filter(it=>it.status==="publicado").length;const pct=ph.items.length?Math.round(pub/ph.items.length*100):0;return`<div class="phase-bar-item"><div class="phase-bar-name">${ph.phase.split("—")[0].trim()}</div><div class="phase-bar-track"><div class="phase-bar-fill" style="width:${pct}%;background:${ph.color}"></div></div><div class="phase-bar-pct">${pct}%</div></div>`;}).join("")}<div class="phase-bar-item"><div class="phase-bar-name">Grilla — publicados</div><div class="phase-bar-track"><div class="phase-bar-fill" style="width:${totalGrilla?Math.round(pubGrilla/totalGrilla*100):0}%"></div></div><div class="phase-bar-pct">${totalGrilla?Math.round(pubGrilla/totalGrilla*100):0}%</div></div></div></div>
+        </div>
       </div>
-      <div class="section-block">
-        <div class="section-title">Progreso por Fase</div>
-        <div class="section-body"><div class="phase-bar-row">${D.gantt.map(ph=>{const pub=ph.items.filter(it=>it.status==="publicado").length;const pct=ph.items.length?Math.round(pub/ph.items.length*100):0;return`<div class="phase-bar-item"><div class="phase-bar-name">${ph.phase.split("—")[0].trim()}</div><div class="phase-bar-track"><div class="phase-bar-fill" style="width:${pct}%;background:${ph.color}"></div></div><div class="phase-bar-pct">${pct}%</div></div>`;}).join("")}<div class="phase-bar-item"><div class="phase-bar-name">Grilla — publicados</div><div class="phase-bar-track"><div class="phase-bar-fill" style="width:${totalGrilla?Math.round(pubGrilla/totalGrilla*100):0}%"></div></div><div class="phase-bar-pct">${totalGrilla?Math.round(pubGrilla/totalGrilla*100):0}%</div></div></div></div>
+      <div class="strategy-note">
+        <strong>Regla editorial:</strong> contenido del lodge → BLW sube, Hypnos colabora. Contenido de producto Hypnos → Hypnos sube.
+        &nbsp;|&nbsp; Inicio real de campaña: <strong>1 diciembre 2026</strong>. BLW actúa como laboratorio en la fase exploratoria actual.
       </div>
-    </div>
-    <div class="strategy-note">
-      <strong>Regla editorial:</strong> contenido del lodge → BLW sube, Hypnos colabora. Contenido de producto Hypnos → Hypnos sube.
-      &nbsp;|&nbsp; Inicio real de campaña: <strong>1 diciembre 2026</strong>. BLW actúa como laboratorio en la fase exploratoria actual.
-    </div>
-    <div class="reset-link"><button onclick="resetData()">Restablecer datos originales</button></div>`;
+      <div class="reset-link"><button id="resetBtn" onclick="resetData()">Restablecer datos originales</button></div>
+    </div>`;
 }
 
 /* ── GANTT ───────────────────────────────────────────────────── */
 function renderGantt(sf="all",pf="all"){
   if(!D) return;
-  const c=document.getElementById("gantt-container"); c.innerHTML="";
+  const c=document.getElementById("gantt-container");
+  c.innerHTML="";
   D.gantt.forEach((phase,pi)=>{
-    const rows=phase.items.map((item,ii)=>({item,ii,show:(sf==="all"||(sf.startsWith("!")?item.status!==sf.slice(1):item.status===sf))&&(pf==="all"||(item.resp||[]).includes(pf))}));
+    const rows=phase.items.map((item,ii)=>({item,ii,show:(sf==="all"||item.status===sf)&&(pf==="all"||(item.resp||[]).includes(pf))}));
     const vis=rows.filter(r=>r.show).length;
-    const block=document.createElement("div"); block.className="phase-block";
+    const block=document.createElement("div");
+    block.className="phase-block";
     block.innerHTML=`
       <div class="phase-header">
         <span class="phase-num" style="background:${phase.color}">${phase.num}</span>
@@ -684,23 +856,31 @@ function renderGantt(sf="all",pf="all"){
         <span class="phase-toggle">▾</span>
       </div>
       <div class="phase-body">
-        <div class="table-scroll"><table class="g-table">
-          <thead><tr>
-            <th style="width:16px"></th><th style="min-width:260px">Tarea / Contenido</th>
-            <th class="gantt-tipo">Tipo</th><th>Responsable</th><th style="width:120px">Fecha</th>
-            <th style="width:130px">Estado</th><th style="width:36px"></th><th style="width:60px"></th>
-          </tr></thead>
-          <tbody>${rows.map(({item,ii,show})=>`
-            <tr data-hidden="${!show}">
-              <td><div class="prio-wrap"><span class="prio prio-${item.prio}" title="${item.prio}"></span></div></td>
-              <td><div class="item-name">${esc(item.name)}${item.hito?`<span class="hito-badge">Hito</span>`:""}</div></td>
-              <td class="gantt-tipo"><span class="type-tag">${esc(item.type)}</span></td>
-              <td>${chips(item.resp)}</td><td>${dateCell(item.fecha)}</td><td>${badge(item.status)}</td>
-              <td style="text-align:center">${item.link?`<a href="${esc(item.link)}" target="_blank" rel="noopener" title="${esc(item.link)}" style="font-size:14px;text-decoration:none;color:var(--accent)">↗</a>`:"—"}</td>
-              <td><button class="btn-edit" data-action="edit-gantt" data-pi="${pi}" data-ii="${ii}">Editar</button></td>
-            </tr>`).join("")}
-          </tbody>
-        </table></div>
+        <div class="table-scroll">
+          <table class="g-table">
+            <thead><tr>
+              <th style="width:16px"></th>
+              <th style="min-width:260px">Tarea / Contenido</th>
+              <th>Tipo</th>
+              <th>Responsable</th>
+              <th style="width:120px">Fecha</th>
+              <th style="width:130px">Estado</th>
+              <th style="width:60px"></th>
+            </tr></thead>
+            <tbody>
+              ${rows.map(({item,ii,show})=>`
+                <tr data-hidden="${!show}">
+                  <td><div class="prio-wrap"><span class="prio prio-${item.prio}" title="${item.prio}"></span></div></td>
+                  <td><div class="item-name">${esc(item.name)}${item.hito?`<span class="hito-badge">Hito</span>`:""}</div>${item.notes?`<div class="item-notes">${esc(item.notes)}</div>`:""}</td>
+                  <td><span class="type-tag">${esc(item.type)}</span></td>
+                  <td>${chips(item.resp)}</td>
+                  <td>${dateCell(item.fecha)}</td>
+                  <td>${badge(item.status)}</td>
+                  <td><button class="btn-edit" data-action="edit-gantt" data-pi="${pi}" data-ii="${ii}">Editar</button></td>
+                </tr>`).join("")}
+            </tbody>
+          </table>
+        </div>
         ${vis===0?'<div class="empty">Sin ítems para los filtros actuales</div>':""}
         <button class="btn-add" data-action="add-gantt" data-pi="${pi}">+ Agregar ítem</button>
       </div>`;
@@ -708,7 +888,8 @@ function renderGantt(sf="all",pf="all"){
     c.appendChild(block);
   });
   c.addEventListener("click",e=>{
-    const btn=e.target.closest("[data-action]"); if(!btn) return;
+    const btn=e.target.closest("[data-action]");
+    if(!btn) return;
     const a=btn.dataset.action,pi=+btn.dataset.pi,ii=+btn.dataset.ii;
     if(a==="edit-gantt") openModal({type:"gantt",pi,ii,mode:"edit"});
     if(a==="add-gantt")  openModal({type:"gantt",pi,ii:null,mode:"add"});
@@ -718,39 +899,47 @@ function renderGantt(sf="all",pf="all"){
 /* ── GRILLA ──────────────────────────────────────────────────── */
 function renderGrilla(sf="all",cf="all"){
   if(!D) return;
-  const c=document.getElementById("grilla-container"); c.innerHTML="";
-  const rows=D.grilla.map((item,ii)=>({item,ii,show:(sf==="all"||(sf.startsWith("!")?item.status!==sf.slice(1):item.status===sf))&&(cf==="all"||item.canal===cf)}));
+  const c=document.getElementById("grilla-container");
+  c.innerHTML="";
+  const rows=D.grilla.map((item,ii)=>({item,ii,show:(sf==="all"||item.status===sf)&&(cf==="all"||item.canal===cf)}));
   const vis=rows.filter(r=>r.show).length;
   const canalCls=cv=>({Hypnos:"canal-hypnos",BLW:"canal-blw",Ambos:"canal-ambos"}[cv]||"");
-  const wrap=document.createElement("div"); wrap.className="table-wrap";
+  const wrap=document.createElement("div");
+  wrap.className="table-wrap";
   wrap.innerHTML=`
-    <div class="table-scroll"><table class="grilla-table">
-      <thead><tr>
-        <th>#</th><th style="min-width:180px">Contenido</th><th class="grilla-pilar">Pilar</th>
-        <th>Formato</th><th class="grilla-desc" style="min-width:160px">Descripción</th><th>Canal</th>
-        <th>Responsable</th><th style="width:110px">Fecha</th><th style="width:120px">Estado</th>
-        <th class="grilla-hitos" style="width:50px">Hitos</th><th style="width:40px">Link</th><th style="width:60px"></th>
-      </tr></thead>
-      <tbody>${rows.map(({item,ii,show})=>`
-        <tr data-hidden="${!show}">
-          <td style="color:var(--fg-sub);font-size:11px;white-space:nowrap">${esc(item.id)}</td>
-          <td style="font-weight:500">${esc(item.name)}</td>
-          <td class="grilla-pilar" style="font-size:12px;color:var(--fg-muted)">${esc(item.pilar)}</td>
-          <td><span class="type-tag">${esc(item.formato)}</span></td>
-          <td class="grilla-desc" style="font-size:12px;color:var(--fg-muted)">${esc(item.desc)}</td>
-          <td><span class="${canalCls(item.canal)}">${esc(item.canal)}</span></td>
-          <td>${chips(item.resp)}</td><td>${dateCell(item.fecha)}</td><td>${badge(item.status)}</td>
-          <td class="grilla-hitos" style="font-size:11px;text-align:center">${item.hitoBlw?`<span style="color:var(--p-regina-fg);font-weight:700;font-size:10px;display:block">BL</span>`:""}${item.hitoHypnos?`<span style="color:var(--p-tomas-fg);font-weight:700;font-size:10px;display:block">H</span>`:""}</td>
-          <td>${item.link?`<a href="${esc(item.link)}" target="_blank" rel="noopener" style="font-size:11px;color:var(--accent)">Ver</a>`:"—"}</td>
-          <td><button class="btn-edit" data-action="edit-grilla" data-ii="${ii}">Editar</button></td>
-        </tr>`).join("")}
-      </tbody>
-    </table></div>
+    <div class="table-scroll">
+      <table class="grilla-table">
+        <thead><tr>
+          <th>#</th><th style="min-width:180px">Contenido</th><th style="min-width:140px">Pilar</th>
+          <th>Formato</th><th style="min-width:160px">Descripción</th><th>Canal</th>
+          <th>Responsable</th><th style="width:110px">Fecha</th><th style="width:120px">Estado</th>
+          <th style="width:50px">Hitos</th><th style="width:40px">Link</th><th style="width:60px"></th>
+        </tr></thead>
+        <tbody>
+          ${rows.map(({item,ii,show})=>`
+            <tr data-hidden="${!show}">
+              <td style="color:var(--fg-sub);font-size:11px;white-space:nowrap">${esc(item.id)}</td>
+              <td style="font-weight:500">${esc(item.name)}${item.notes?`<div class="item-notes">${esc(item.notes)}</div>`:""}</td>
+              <td style="font-size:12px;color:var(--fg-muted)">${esc(item.pilar)}</td>
+              <td><span class="type-tag">${esc(item.formato)}</span></td>
+              <td style="font-size:12px;color:var(--fg-muted)">${esc(item.desc)}</td>
+              <td><span class="${canalCls(item.canal)}">${esc(item.canal)}</span></td>
+              <td>${chips(item.resp)}</td>
+              <td>${dateCell(item.fecha)}</td>
+              <td>${badge(item.status)}</td>
+              <td style="font-size:11px;text-align:center">${item.hitoBlw?`<span style="color:var(--p-regina-fg);font-weight:700;font-size:10px;display:block">BL</span>`:""}${item.hitoHypnos?`<span style="color:var(--p-tomas-fg);font-weight:700;font-size:10px;display:block">H</span>`:""}</td>
+              <td>${item.link?`<a href="${esc(item.link)}" target="_blank" style="font-size:11px;color:var(--accent)">Ver</a>`:"—"}</td>
+              <td><button class="btn-edit" data-action="edit-grilla" data-ii="${ii}">Editar</button></td>
+            </tr>`).join("")}
+        </tbody>
+      </table>
+    </div>
     ${vis===0?'<div class="empty">Sin ítems para los filtros actuales</div>':""}
     <button class="btn-add" data-action="add-grilla">+ Agregar contenido</button>`;
   c.appendChild(wrap);
   c.addEventListener("click",e=>{
-    const btn=e.target.closest("[data-action]"); if(!btn) return;
+    const btn=e.target.closest("[data-action]");
+    if(!btn) return;
     const a=btn.dataset.action,ii=+btn.dataset.ii;
     if(a==="edit-grilla") openModal({type:"grilla",ii,mode:"edit"});
     if(a==="add-grilla")  openModal({type:"grilla",ii:null,mode:"add"});
@@ -764,12 +953,12 @@ function selOpts(options,val){ return options.map(o=>`<option value="${esc2(o)}"
 function respChecks(arr){ return PERSONS.map(p=>`<label class="checkbox-item"><input type="checkbox" value="${esc2(p)}"${(arr||[]).includes(p)?" checked":""}> ${personChip(p)}</label>`).join(""); }
 
 function buildGanttForm(item){
-  const v=item||{name:"",type:"Contenido",resp:[],fecha:"",status:"pendiente",prio:"media",hito:false,link:"",notes:""};
+  const v=item||{name:"",type:"Contenido",resp:[],fecha:"",status:"pendiente",prio:"media",hito:false,notes:""};
   return `
     <div class="form-group"><label class="form-label">Nombre</label><input class="form-input" id="f-name" value="${esc2(v.name)}" placeholder="Nombre del ítem"></div>
     <div class="form-row">
       <div class="form-group"><label class="form-label">Tipo</label><select class="form-select" id="f-type">${selOpts(TYPES,v.type)}</select></div>
-      <div class="form-group"><label class="form-label">Fecha</label><input class="form-input" id="f-fecha" value="${esc2(v.fecha)}" placeholder="DD/MM/YYYY o URGENTE"></div>
+      <div class="form-group"><label class="form-label">Fecha</label><input class="form-input" id="f-fecha" value="${esc2(v.fecha)}" placeholder="DD/MM/YYYY"></div>
     </div>
     <div class="form-row">
       <div class="form-group"><label class="form-label">Estado</label><select class="form-select" id="f-status">${selOpts(STATUSES,v.status)}</select></div>
@@ -777,7 +966,6 @@ function buildGanttForm(item){
     </div>
     <div class="form-group"><label class="form-label">Responsable</label><div class="checkbox-group">${respChecks(v.resp)}</div></div>
     <div class="form-group"><label class="form-label">Notas / Detalle</label><textarea class="form-textarea" id="f-notes" placeholder="Detalle, contexto, instrucciones...">${esc2(v.notes)}</textarea></div>
-    <div class="form-group"><label class="form-label">Link</label><input class="form-input" id="f-link" value="${esc2(v.link||"")}" placeholder="https://..."></div>
     <div class="form-group"><label class="toggle-wrap"><input type="checkbox" id="f-hito"${v.hito?" checked":""}> Marcar como Hito de campaña</label></div>`;
 }
 function buildGrillaForm(item){
@@ -806,12 +994,13 @@ function buildGrillaForm(item){
 }
 function openModal(ctx){
   modalCtx=ctx; deleteStep=0;
+  const overlay=document.getElementById("modalOverlay");
   document.getElementById("modalTitle").textContent=ctx.mode==="edit"?"Editar ítem":"Agregar ítem";
   document.getElementById("modalDelete").style.display=ctx.mode==="edit"?"":"none";
   document.getElementById("modalDelete").textContent="Eliminar";
   document.getElementById("modalDelete").className="btn btn-danger";
   document.getElementById("modalBody").innerHTML=ctx.type==="gantt"?buildGanttForm(ctx.mode==="edit"?D.gantt[ctx.pi].items[ctx.ii]:null):buildGrillaForm(ctx.mode==="edit"?D.grilla[ctx.ii]:null);
-  document.getElementById("modalOverlay").classList.add("open");
+  overlay.classList.add("open");
 }
 function closeModal(){ document.getElementById("modalOverlay").classList.remove("open"); modalCtx=null; deleteStep=0; }
 function getVal(id){ const el=document.getElementById(id); return el?el.value.trim():""; }
@@ -819,11 +1008,12 @@ function getCheck(id){ const el=document.getElementById(id); return el?el.checke
 function getCheckedBoxes(){ return [...document.querySelectorAll(".checkbox-group input:checked")].map(e=>e.value); }
 
 async function saveModal(){
-  const ctx=modalCtx; if(!ctx) return;
+  const ctx=modalCtx;
+  if(!ctx) return;
   const name=getVal("f-name");
   if(!name){ alert("El nombre es obligatorio."); return; }
   if(ctx.type==="gantt"){
-    const item={id:ctx.mode==="edit"?D.gantt[ctx.pi].items[ctx.ii].id:uid(),name,type:getVal("f-type"),resp:getCheckedBoxes(),fecha:getVal("f-fecha")||"Por definir",status:getVal("f-status")||"pendiente",prio:getVal("f-prio")||"media",hito:getCheck("f-hito"),link:getVal("f-link")||"",notes:getVal("f-notes")};
+    const item={id:ctx.mode==="edit"?D.gantt[ctx.pi].items[ctx.ii].id:uid(),name,type:getVal("f-type"),resp:getCheckedBoxes(),fecha:getVal("f-fecha")||"Por definir",status:getVal("f-status")||"pendiente",prio:getVal("f-prio")||"media",hito:getCheck("f-hito"),notes:getVal("f-notes")};
     if(ctx.mode==="edit") D.gantt[ctx.pi].items[ctx.ii]=item;
     else D.gantt[ctx.pi].items.push(item);
   } else {
@@ -831,39 +1021,49 @@ async function saveModal(){
     if(ctx.mode==="edit") D.grilla[ctx.ii]=item;
     else D.grilla.push(item);
   }
+  setSyncDot("saving");
   await saveData(D);
+  setSyncDot("live");
   closeModal();
   rerenderAll();
 }
 function deleteModal(){
-  const ctx=modalCtx; if(!ctx) return;
+  const ctx=modalCtx;
+  if(!ctx) return;
   const btn=document.getElementById("modalDelete");
   if(deleteStep===0){ btn.textContent="Confirmar eliminación"; btn.className="btn"; deleteStep=1; return; }
   if(ctx.type==="gantt") D.gantt[ctx.pi].items.splice(ctx.ii,1);
   else D.grilla.splice(ctx.ii,1);
-  saveData(D);
+  setSyncDot("saving");
+  saveData(D).then(()=>setSyncDot("live"));
   closeModal();
   rerenderAll();
 }
 let resetStep=0;
 function resetData(){
-  const btn=document.querySelector(".reset-link button"); if(!btn) return;
+  const btn=document.getElementById("resetBtn");
+  if(!btn) return;
   if(resetStep===0){ btn.textContent="Confirmar restablecimiento"; btn.style.color="var(--s-urg-fg)"; resetStep=1; return; }
   localStorage.removeItem(LS_KEY);
   D=JSON.parse(JSON.stringify(DEFAULT_DATA));
   resetStep=0;
-  saveData(D);
+  if(btn){ btn.textContent="Restablecer datos originales"; btn.style.color=""; }
+  setSyncDot("saving");
+  saveData(D).then(()=>setSyncDot("live"));
   rerenderAll();
 }
 
 /* ── FILTERS ─────────────────────────────────────────────────── */
 let ganttStatus="all",ganttPerson="all",grillaStatus="all",grillaCanal="all";
 function setupFilters(id,onChange){
-  const g=document.getElementById(id); if(!g) return;
+  const g=document.getElementById(id);
+  if(!g) return;
   g.addEventListener("click",e=>{
-    const p=e.target.closest(".pill"); if(!p) return;
+    const p=e.target.closest(".pill");
+    if(!p) return;
     g.querySelectorAll(".pill").forEach(x=>x.classList.remove("active"));
-    p.classList.add("active"); onChange(p.dataset.filter);
+    p.classList.add("active");
+    onChange(p.dataset.filter);
   });
 }
 setupFilters("fs-gantt",v=>{ ganttStatus=v; renderGantt(ganttStatus,ganttPerson); });
@@ -889,8 +1089,54 @@ document.getElementById("modalClose").addEventListener("click",closeModal);
 document.getElementById("modalOverlay").addEventListener("click",e=>{ if(e.target===e.currentTarget) closeModal(); });
 document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeModal(); });
 
-/* ── START ───────────────────────────────────────────────────── */
+/* ── INIT (con DB compartida) ────────────────────────────────── */
+async function init(){
+  initMode();
+  D = loadFromLS();
+  rerenderAll();
+
+  let db = null;
+  try { db = await claude.use("db"); } catch(e){}
+
+  if(!db){
+    setSyncDot("");
+    return;
+  }
+
+  dbRef = db.doc("plan/data");
+  let initialLoaded = false;
+
+  const timer = setTimeout(()=>{
+    if(!initialLoaded){
+      setSyncDot("error");
+      const bar = document.getElementById("syncBar");
+      bar.textContent = "No se pudo conectar con la base de datos. Usando datos locales.";
+      bar.classList.add("show");
+    }
+  }, 10000);
+
+  dbRef.onSnapshot(snap => {
+    clearTimeout(timer);
+    initialLoaded = true;
+    if(snap.metadata.hasPendingWrites) return;
+    if(snap.exists){
+      const data = snap.data();
+      if(data && data.gantt && data.grilla){
+        D = JSON.parse(JSON.stringify(data));
+        try { localStorage.setItem(LS_KEY, JSON.stringify(D)); } catch(e){}
+        if(!document.getElementById("modalOverlay").classList.contains("open")){
+          rerenderAll();
+        }
+      }
+    }
+    setSyncDot("live");
+  }, err => {
+    console.warn("DB snapshot error", err);
+    setSyncDot("error");
+  });
+}
+
 init();
 </script>
-</body>
-</html>
+
+</body></html>
